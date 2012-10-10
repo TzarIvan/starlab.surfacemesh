@@ -1,0 +1,12 @@
+QT += opengl xml
+
+INCLUDEPATH *= $$PWD
+DEPENDPATH  *= $$PWD
+INCLUDEPATH *= .
+DEPENDPATH  *= .
+INCLUDEPATH *= $$PWD/helpers
+DEPENDPATH  *= $$PWD/helpers
+
+export(INCLUDEPATH)
+export(DEPENDPATH)
+export(LIBS)
