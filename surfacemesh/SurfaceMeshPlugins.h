@@ -7,6 +7,7 @@
 #include "interfaces/FilterPlugin.h"
 #include "interfaces/ModePlugin.h"
 #include "interfaces/RenderPlugin.h"
+#include "parameters/RichParameterSet.h"
 
 #include "SurfaceMeshModel.h"
 #include "SurfaceMeshTypes.h"
