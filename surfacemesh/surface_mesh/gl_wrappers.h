@@ -20,25 +20,26 @@
 
 
 //== INCLUDES =================================================================
+#if 0
+    // Mac OS X
+    #ifdef __APPLE__
+    #  include <GLUT/glut.h>
+    #  include <OpenGL/gl.h>
+    #  include <OpenGL/glu.h>
 
-// Mac OS X
-#ifdef __APPLE__
-#  include <GLUT/glut.h>
-#  include <OpenGL/gl.h>
-#  include <OpenGL/glu.h>
+    // Windows
+    #elif _WIN32
+    #  include <stdlib.h>
+    //#  include <GL/glut.h>
+    #  include <GL/gl.h>
+    #  include <GL/glu.h>
 
-// Windows
-#elif _WIN32
-#  include <stdlib.h>
-//#  include <GL/glut.h>
-#  include <GL/gl.h>
-#  include <GL/glu.h>
-
-// Unix
-#else
-#  include <GL/glut.h>
-#  include <GL/gl.h>
-#  include <GL/glu.h>
+    // Unix
+    #else
+    #  include <GL/glut.h>
+    #  include <GL/gl.h>
+    #  include <GL/glu.h>
+    #endif
 #endif
 
 #include "geometry/Vector.h"
