@@ -1,12 +1,8 @@
-QT += opengl xml
+load($$[STARLAB])
+StarlabTemplate(modelprf)
 
-INCLUDEPATH *= $$PWD
-DEPENDPATH  *= $$PWD
-INCLUDEPATH *= .
-DEPENDPATH  *= .
 INCLUDEPATH *= $$PWD/helpers
 DEPENDPATH  *= $$PWD/helpers
 
-export(INCLUDEPATH)
-export(DEPENDPATH)
-export(LIBS)
+INCLUDEPATH *= $$PWD/parameters
+DEPENDPATH  *= $$PWD/parameters

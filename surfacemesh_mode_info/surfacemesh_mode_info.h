@@ -1,7 +1,7 @@
 #pragma once
-#include "qglviewer.h"
 #include "SurfaceMeshPlugins.h"
 #include "SurfaceMeshHelper.h"
+#include "StarlabDrawArea.h"
 
 enum DrawElementType{VERT_IDX, FACE_IDX, EDGE_IDX, HDGE_IDX};
 

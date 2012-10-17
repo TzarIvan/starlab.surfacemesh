@@ -1,6 +1,6 @@
-CONFIG += starlab 
-STARLAB_TEMPLATE += plugin 
-STARLAB_DEPENDS += ../surfacemesh
+load($$[STARLAB])
+load($$[SURFACEMESH])
+StarlabTemplate(plugin)
 
 DEFINES += TODO_WIREFRAME_VBUFFER
 

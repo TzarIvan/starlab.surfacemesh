@@ -1,7 +1,7 @@
-CONFIG += starlab 
-STARLAB_TEMPLATE += plugin 
-STARLAB_DEPENDS += surfacemesh_model skeleton_model
-STARLAB_EXTERNAL += eigen-3.1.0-rc1
+load($$[STARLAB])
+load($$[EIGEN])
+load($$[SURFACEMESH])
+StarlabTemplate(plugin)
 
 INCLUDEPATH += . src/umfpack_solver
 

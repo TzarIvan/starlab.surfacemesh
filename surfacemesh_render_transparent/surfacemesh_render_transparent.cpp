@@ -6,6 +6,13 @@ typedef Surface_mesh::Face_iterator FaceItr;
 typedef std::pair<double, FaceItr> DepthFace;
 bool depthSorter(DepthFace i, DepthFace j){ return (i.first < j.first); }
 
+// GLU was removed from Qt in version 4.8 
+#ifdef Q_OS_MAC
+# include <OpenGL/glu.h>
+#else
+# include <GL/glu.h>
+#endif
+
 void surfacemesh_render_transparent::render(){
     Surface_mesh::Vertex_property<Point>  points = mesh()->vertex_property<Point>("v:point");    
 	Surface_mesh::Vertex_property<Point>  vnormals = mesh()->vertex_property<Point>("v:normal");

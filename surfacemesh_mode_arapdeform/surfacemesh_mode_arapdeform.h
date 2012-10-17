@@ -1,5 +1,5 @@
 #pragma once
-#include "qglviewer.h"
+#include "StarlabDrawArea.h"
 #include "SurfaceMeshPlugins.h"
 #include "SurfaceMeshHelper.h"
 

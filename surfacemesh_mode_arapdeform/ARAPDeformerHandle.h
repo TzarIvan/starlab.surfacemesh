@@ -1,5 +1,5 @@
 #include "SurfaceMeshHelper.h"
-#include "manipulatedFrame.h"
+#include "qglviewer/manipulatedFrame.h"
 using namespace qglviewer;
 using namespace SurfaceMeshTypes;
 

@@ -1,6 +1,6 @@
-CONFIG += starlab 
-STARLAB_TEMPLATE = plugin 
-STARLAB_DEPENDS += ../surfacemesh
+load($$[STARLAB])
+load($$[SURFACEMESH])
+StarlabTemplate(plugin)
 
 HEADERS += surfacemesh_io_obj.h
 SOURCES += surfacemesh_io_obj.cpp

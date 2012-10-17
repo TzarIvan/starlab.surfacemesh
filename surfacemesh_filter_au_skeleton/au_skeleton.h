@@ -1,5 +1,5 @@
 #pragma once
-#include "interfaces/SurfaceMeshModelPlugins.h"
+#include "SurfaceMeshPlugins.h"
 
 class filter_au_skeleton : public FilterPlugin{
     Q_OBJECT

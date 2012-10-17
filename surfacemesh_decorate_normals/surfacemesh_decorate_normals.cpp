@@ -1,6 +1,6 @@
 #include "surfacemesh_decorate_normals.h"
+#include <QtOpenGL>
 #include "StarlabDrawArea.h"
-#include <qgl.h>
 #include "SurfaceMeshModel.h"
 #include "SurfaceMeshTypes.h"
 #include "SurfaceMeshHelper.h"

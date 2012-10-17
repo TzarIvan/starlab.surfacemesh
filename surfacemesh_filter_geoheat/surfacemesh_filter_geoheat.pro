@@ -1,7 +1,7 @@
-CONFIG += starlab
-STARLAB_TEMPLATE += plugin
-STARLAB_DEPENDS += ../surfacemesh
-STARLAB_EXTERNAL += cholmod eigen
+load($$[STARLAB])
+load($$[SURFACEMESH])
+load($$[EIGEN])
+StarlabTemplate(plugin)
 
 HEADERS += surfacemesh_filter_geoheat.h
 SOURCES += surfacemesh_filter_geoheat.cpp

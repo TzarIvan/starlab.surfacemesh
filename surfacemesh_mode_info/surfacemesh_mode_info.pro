@@ -1,6 +1,6 @@
-CONFIG += starlab 
-STARLAB_TEMPLATE += plugin 
-STARLAB_DEPENDS += ../surfacemesh
+load($$[STARLAB])
+load($$[SURFACEMESH])
+StarlabTemplate(plugin)
 
 HEADERS += surfacemesh_mode_info.h \ 
     FindDialog.h
