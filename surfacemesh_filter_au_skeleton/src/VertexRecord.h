@@ -11,12 +11,15 @@
 
 #include <set>
 
-#include <Eigen/Geometry>
-using namespace Eigen;
-
 #include "SurfaceMeshModel.h"
 #include "SurfaceMeshTypes.h"
 using namespace SurfaceMeshTypes;
+
+// Eigen is used for sparse matrix (and solving)
+#include <Eigen/Core>
+#include <Eigen/Sparse>
+#include <Eigen/Geometry>
+using namespace Eigen;
 
 
 // Subset of QSurfaceMesh from 'ennetws@gmail.com'

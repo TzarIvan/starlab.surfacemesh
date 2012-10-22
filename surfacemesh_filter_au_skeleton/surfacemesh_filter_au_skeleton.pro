@@ -1,9 +1,7 @@
 load($$[STARLAB])
-load($$[EIGEN])
 load($$[SURFACEMESH])
+load($$[EIGEN])
 StarlabTemplate(plugin)
-
-INCLUDEPATH += . src/umfpack_solver
 
 HEADERS += au_skeleton.h \
     src/VertexRecord.h \

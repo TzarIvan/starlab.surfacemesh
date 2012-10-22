@@ -15,7 +15,7 @@ class surfacemesh_filter_geoheat : public SurfaceMeshFilterPlugin{
 public:
     surfacemesh_filter_geoheat() { h = NULL; }
     ~surfacemesh_filter_geoheat(){ delete h; }
-    QString name() { return "Compute geodesics on heat"; }
+    QString name() { return "Geodesic distance: heat kernel"; }
     QString description() { return "Compute geodesic distance using the Heat Kernel."; }
 
     void initParameters(RichParameterSet* pars);

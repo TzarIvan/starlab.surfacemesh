@@ -8,9 +8,6 @@
 // Skeleton data structure
 #include "Skeleton.h"
 
-// Eigen is used for sparse matrix (and solving)
-#include <Eigen/Sparse>
-
 class SkeletonExtract{
 
 public:
