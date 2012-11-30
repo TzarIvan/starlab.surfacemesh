@@ -12,8 +12,6 @@
 #include "SurfaceMeshModel.h"
 #include "SurfaceMeshTypes.h"
 
-using namespace SurfaceMeshTypes;
-
 namespace{
     /// Is the given model a SurfaceMeshModel?
     bool isA(Model* model){ return qobject_cast<SurfaceMeshModel*>(model); }

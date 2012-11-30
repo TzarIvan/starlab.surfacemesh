@@ -1,6 +1,7 @@
 #include <qgl.h>
 #include "surfacemesh_render_verts.h"
 #include "SurfaceMeshHelper.h"
+using namespace SurfaceMeshTypes;
 
 void surfacemesh_render_verts::render(){
     Surface_mesh::Vertex_property<Point> points = mesh()->vertex_property<Point>("v:point");

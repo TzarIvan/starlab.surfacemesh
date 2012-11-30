@@ -2,11 +2,12 @@
 #include <float.h>
 #include "SurfaceMeshHelper.h"
 #include "SurfaceMeshTypes.h"
-using namespace SurfaceMeshTypes;
 
 #ifdef WIN32
 #define NAN std::numeric_limits<Scalar>::signaling_NaN()
 #endif
+
+namespace SurfaceMeshTypes{
 
 struct MeanHelper{
 private:
@@ -143,3 +144,5 @@ public:
 };
 
 typedef StatisticsHelper<Scalar> ScalarStatisticsHelper;
+
+} /// namespace
