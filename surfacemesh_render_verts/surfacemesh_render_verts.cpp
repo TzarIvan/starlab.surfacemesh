@@ -4,14 +4,12 @@
 
 void surfacemesh_render_verts::render(){
     Surface_mesh::Vertex_property<Point> points = mesh()->vertex_property<Point>("v:point");
-    glDisable(GL_LIGHTING);
-
-    glBegin(GL_POINTS);
-    glPointSize(3.0);
-        foreach(Vertex v, mesh()->vertices())
-            glVertex3dv(points[v].data());
-	glEnd();
-
+        glDisable(GL_LIGHTING);
+        glPointSize(3.0);
+        glBegin(GL_POINTS);
+            foreach(Vertex v, mesh()->vertices())
+                glVertex3dv(points[v].data());
+        glEnd();
     glEnable(GL_LIGHTING);
 }
 
