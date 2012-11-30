@@ -2,17 +2,20 @@
 #include "SurfaceMeshHelper.h"
 #include <float.h>
 
-static uint qHash( const Vertex &key ){return qHash(key.idx()); }
-
 // Eigne matrix library
 #include <Eigen/Core>
 #include <Eigen/Sparse>
 #include <Eigen/CholmodSupport>
+
+using namespace std;
 using namespace Eigen;
-typedef CholmodSupernodalLLT< SparseMatrix<double> > CholmodSolver;
+using namespace SurfaceMeshTypes; 
 
 #define qRanged(min, v, max) ( qMax(min, qMin(v, max)) )
 #define EPSILON 1e-12
+typedef CholmodSupernodalLLT< SparseMatrix<double> > CholmodSolver;
+
+static uint qHash( const Vertex &key ){return qHash(key.idx()); }
 
 class GeoHeatHelper : public SurfaceMeshHelper{
 

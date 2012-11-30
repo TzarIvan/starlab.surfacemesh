@@ -2,6 +2,8 @@
 #include "surfacemesh_render_wireframe.h"
 #include "surface_mesh/gl_wrappers.h"
 
+using namespace SurfaceMeshTypes;
+
 void surfacemesh_render_wireframe::init(){
     // qDebug() << "surfacemesh_render_wireframe::init";
     // mesh()->update_face_normals();

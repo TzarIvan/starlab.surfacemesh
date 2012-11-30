@@ -2,6 +2,8 @@
 #include "surfacemesh_render_transparent.h"
 #include "surface_mesh/gl_wrappers.h"
 
+using namespace SurfaceMeshTypes;
+
 typedef Surface_mesh::Face_iterator FaceItr;
 typedef std::pair<double, FaceItr> DepthFace;
 bool depthSorter(DepthFace i, DepthFace j){ return (i.first < j.first); }
