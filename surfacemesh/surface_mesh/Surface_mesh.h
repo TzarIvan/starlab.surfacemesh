@@ -449,6 +449,11 @@ public: //------------------------------------------------------ iterator types
             return !operator==(rhs);
         }
 
+        /// @note added to support std::for_each like constructs
+        Face operator*() const{
+            return hnd_;
+        }
+        
         /// pre-increment iterator
         Face_iterator& operator++()
         {
