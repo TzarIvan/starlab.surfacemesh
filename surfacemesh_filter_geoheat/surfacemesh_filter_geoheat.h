@@ -21,17 +21,5 @@ public:
     void initParameters(RichParameterSet* pars);
     void applyFilter(RichParameterSet* pars);
 
-    void precompute();
-    void setSource(const QSet<Vertex> &fromVerts);
-
-    ScalarVertexProperty uniformDistance(const QSet<Vertex> &source);
-
-private:
-    GeoHeatHelper*          h;
-    SparseMatrix<Scalar>    A;
-    Scalar                  t;
-    SparseMatrix<Scalar>    Lc;
-    VectorXd                u0;
-
-    CholmodSolver heat_flow, poisson_solver;
+    GeoHeatHelper * h;
 };
