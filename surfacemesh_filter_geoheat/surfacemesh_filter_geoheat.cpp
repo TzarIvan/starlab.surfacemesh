@@ -8,9 +8,11 @@ void surfacemesh_filter_geoheat::initParameters(RichParameterSet *pars)
     pars->addParam(new RichBool("visualizeDistance", true, "Visualize Distance"));
 }
 
-void surfacemesh_filter_geoheat::precompute()
+void surfacemesh_filter_geoheat::precompute( SurfaceMeshModel * useMesh )
 {
-    h   = new GeoHeatHelper( mesh() );
+    if(useMesh == NULL) useMesh = mesh();
+
+    h   = new GeoHeatHelper( useMesh );
     A   = h->A();
     t   = h->t();
     Lc  = h->Lc();
@@ -49,9 +51,9 @@ void surfacemesh_filter_geoheat::applyFilter(RichParameterSet *pars)
     }
 }
 
-ScalarVertexProperty surfacemesh_filter_geoheat::uniformDistance(const QSet<Vertex> & source)
+ScalarVertexProperty surfacemesh_filter_geoheat::uniformDistance(const QSet<Vertex> & source, SurfaceMeshModel * useMesh)
 {
-    if(!h) precompute();
+    if(!h) precompute(useMesh);
 
     // 0) Set source vertices
     u0 = h->u0( source );

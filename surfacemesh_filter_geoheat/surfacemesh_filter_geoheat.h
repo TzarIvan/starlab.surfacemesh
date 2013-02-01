@@ -21,10 +21,10 @@ public:
     void initParameters(RichParameterSet* pars);
     void applyFilter(RichParameterSet* pars);
 
-    void precompute();
+    void precompute( SurfaceMeshModel * useMesh = NULL );
     void setSource(const QSet<Vertex> &fromVerts);
 
-    ScalarVertexProperty uniformDistance(const QSet<Vertex> &source);
+    ScalarVertexProperty uniformDistance(const QSet<Vertex> &source, SurfaceMeshModel * useMesh = NULL);
 
 private:
     GeoHeatHelper*          h;
