@@ -267,6 +267,41 @@ public:
         return vprop;
     }
 
+	// Assuming "unifromDistance(pname)" has been called with default name
+	std::vector<Vertex> shortestVertexPath(const Vertex & toVertex)
+	{
+		ScalarVertexProperty dists = mesh->vertex_property<Scalar>("v:uniformDistance");
+
+		std::vector<Vertex> path;
+		path.push_back(toVertex);
+
+		// back track
+		Halfedge h = mesh->halfedge( toVertex );
+		Vertex curV = toVertex;
+
+		while( dists[mesh->to_vertex(h)] != 0.0 ) // safe?
+		{
+			double minDist = DBL_MAX;
+			foreach(Halfedge hj, mesh->onering_hedges(curV))
+			{
+				double dist = dists[ mesh->to_vertex(hj) ];
+				if(dist < minDist){
+					minDist = dist;
+					h = hj;
+				}
+			}
+			curV = mesh->to_vertex(h) ;
+
+			if(curV != path.back())
+				path.push_back(curV);
+			else
+				break;
+		}
+
+		std::reverse(path.begin(), path.end());
+		return path;
+	}
+
     void cleanUp(bool isAll = false)
     {
         ScalarVertexProperty heat  = getScalarVertexProperty("v:heat_distance");
