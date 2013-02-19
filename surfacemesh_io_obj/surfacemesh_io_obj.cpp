@@ -1,6 +1,6 @@
 #include "surfacemesh_io_obj.h"
 #include "SurfaceMeshHelper.h"
-using namespace SurfaceMeshTypes;
+using namespace SurfaceMesh;
 
 Model* surfacemesh_io_obj::open(QString path){
     SurfaceMeshModel* model = new SurfaceMeshModel(path);

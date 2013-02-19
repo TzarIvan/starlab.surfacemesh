@@ -13,11 +13,14 @@
 /// Allow user to use Qt "foreach" constructs
 #include "helpers/SurfaceMeshQForEachHelpers.h"
 
+/// Legal here as this is included in plugins
+using namespace SurfaceMesh;
+
 namespace{
     /// Is the given model a SurfaceMeshModel?
-    bool isA(Model* model){ return qobject_cast<SurfaceMesh::Model*>(model); }
+    bool isA(Starlab::Model* model){ return qobject_cast<SurfaceMesh::Model*>(model); }
     /// Safely convert to a surfacemesh
-    SurfaceMesh::Model* safeCast(Model* model){
+    SurfaceMesh::Model* safeCast(Starlab::Model* model){
         SurfaceMesh::Model* mesh = qobject_cast<SurfaceMesh::Model*>(model);
         if(!mesh) throw StarlabException("Model is not a SurfaceMeshModel");
         return mesh;
@@ -26,15 +29,15 @@ namespace{
 
 class SurfaceMeshInputOutputPlugin : public InputOutputPlugin{
 private: 
-    void save(Model* model,QString path){ save(safeCast(model),path); }
-    bool isApplicable(Model* model){ return isA(model); }    
+    void save(Starlab::Model* model,QString path){ save(safeCast(model),path); }
+    bool isApplicable(Starlab::Model* model){ return isA(model); }    
 public:
     virtual void save(SurfaceMesh::Model* model, QString path) = 0;
 };
 
 class SurfaceMeshRenderPlugin : public RenderPlugin{
 private: 
-    bool isApplicable(Model* model){ return isA(model); }
+    bool isApplicable(Starlab::Model* model){ return isA(model); }
 public: 
     SurfaceMesh::Model* mesh(){ return safeCast(model()); }
 };
@@ -43,7 +46,7 @@ class SurfaceMeshFilterPlugin : public FilterPlugin{
 public:
     SurfaceMesh::Model* mesh(){ return safeCast(model()); }    
 private:
-    bool isApplicable(Model* model) { return isA(model); }
+    bool isApplicable(Starlab::Model* model) { return isA(model); }
 };
 
 class SurfaceMeshModePlugin : public ModePlugin{
