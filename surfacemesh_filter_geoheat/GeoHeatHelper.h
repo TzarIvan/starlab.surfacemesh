@@ -27,6 +27,10 @@ public:
     ScalarEdgeProperty ecot;
     Vector3FaceProperty fgradient;
 
+    SparseMatrix<Scalar>    Lc_;
+    CholmodSolver heat_flow, poisson_solver;
+
+public:
     GeoHeatHelper(SurfaceMeshModel* mesh) : SurfaceMeshHelper(mesh)
     {
         points  = this->getVector3VertexProperty(VPOINT);
@@ -42,6 +46,39 @@ public:
         vfunction   = mesh->vertex_property<Scalar> ("v:function", 0);
         ecot        = mesh->edge_property<Scalar>   ("e:cotan", 0);
         fgradient   = mesh->face_property<Vector3>  ("f:gradient", Vector3(0));
+    }
+
+    ~GeoHeatHelper()
+    {
+        cleanUp( true );
+    }
+
+    void precompute()
+    {
+        Lc_ = Lc();
+
+        heat_flow.compute( A() + (t() * Lc_) );
+        poisson_solver.compute( Lc_ );
+    }
+
+    ScalarVertexProperty getUniformDistance(const QSet<Vertex> &source)
+    {
+        if(Lc_.size() == 0) precompute();
+
+        // 0) Set source vertices
+        VectorXd u0_ = u0( source );
+
+        // 1) Compute heat flow for time 't'
+        set( heat_flow.solve( u0_ ), "v:heat" );
+
+        // 2) Evaluate vector field X
+        gradientFaces();
+
+        // 3) Comptue distance function (solve Poisson equation)
+        VectorXd d = divergenceVertices();
+        set( poisson_solver.solve( d ), "v:heat_distance");
+
+        return unifromDistance();
     }
 
     Scalar t()
@@ -229,6 +266,41 @@ public:
 
         return vprop;
     }
+
+	// Assuming "unifromDistance(pname)" has been called with default name
+	std::vector<Vertex> shortestVertexPath(const Vertex & toVertex)
+	{
+		ScalarVertexProperty dists = mesh->vertex_property<Scalar>("v:uniformDistance");
+
+		std::vector<Vertex> path;
+		path.push_back(toVertex);
+
+		// back track
+		Halfedge h = mesh->halfedge( toVertex );
+		Vertex curV = toVertex;
+
+		while( dists[mesh->to_vertex(h)] != 0.0 ) // safe?
+		{
+			double minDist = DBL_MAX;
+			foreach(Halfedge hj, mesh->onering_hedges(curV))
+			{
+				double dist = dists[ mesh->to_vertex(hj) ];
+				if(dist < minDist){
+					minDist = dist;
+					h = hj;
+				}
+			}
+			curV = mesh->to_vertex(h) ;
+
+			if(curV != path.back())
+				path.push_back(curV);
+			else
+				break;
+		}
+
+		std::reverse(path.begin(), path.end());
+		return path;
+	}
 
     void cleanUp(bool isAll = false)
     {
