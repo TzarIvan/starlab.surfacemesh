@@ -106,3 +106,6 @@ typedef SurfaceMeshModel Model;
 
 /// Allow user to use Qt "foreach" constructs
 #include "helpers/SurfaceMeshQForEachHelpers.h"
+
+/// Append namespace to name
+typedef SurfaceMesh::Model SurfaceMeshModel;
