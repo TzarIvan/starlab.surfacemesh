@@ -2,6 +2,7 @@
 
 #include "SurfaceMeshModel.h"
 #include "helpers/SurfaceMeshQForEachHelpers.h"
+using namespace SurfaceMesh;
 
 SurfaceMeshModel::SurfaceMeshModel(QString path, QString name) : Model(path, name){
     /// Allocate rendering system
@@ -58,11 +59,6 @@ SurfaceMeshForEachFaceHelper SurfaceMeshModel::faces(){
 
 SurfaceMeshForEachOneRingEdgesHelper SurfaceMeshModel::onering_hedges(Surface_mesh::Vertex v){
     return SurfaceMeshForEachOneRingEdgesHelper(this,v);
-}
-
-void SurfaceMeshModel::remove_vertex(Vertex v){
-	this->vdeleted_[v] = true;
-	this->garbage_ = true;
 }
 
 QDebug operator<< (QDebug d, const Surface_mesh::Edge& edge) {

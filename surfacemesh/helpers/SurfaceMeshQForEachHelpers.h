@@ -1,5 +1,7 @@
 #pragma once
 
+namespace SurfaceMesh{
+
 /// @see SurfaceMeshModel::halfedges()
 class SurfaceMeshForEachHalfedgeHelper{
 private:
@@ -140,3 +142,5 @@ public:
     const_iterator begin() const{return const_iterator(m,BEGIN);}
     const_iterator end() const{return const_iterator(m,END);}   
 };
+
+}

@@ -3,7 +3,7 @@
 #include "surface_mesh/gl_wrappers.h"
 #include "StarlabDrawArea.h"
 
-using namespace SurfaceMeshTypes;
+using namespace SurfaceMesh;
 
 void surfacemesh_render_flatwire::init(){
     mesh()->update_face_normals();

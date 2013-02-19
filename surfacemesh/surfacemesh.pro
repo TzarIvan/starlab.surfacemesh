@@ -8,7 +8,6 @@ OTHER_FILES = surfacemesh.prf
 # THIS IS FOR OUR MODEL WRAPPER
 HEADERS += SurfaceMeshModel.h \
     dynamic_surfacemesh_global.h \
-    SurfaceMeshTypes.h \
     SurfaceMeshHelper.h \
     SurfaceMeshPlugins.h \
     helpers/ColorMap.h \

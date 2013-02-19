@@ -23,7 +23,6 @@
 //== INCLUDES =================================================================
 #include "../geometry/Vector.h"
 #include "properties.h"
-#include "../SurfaceMeshTypes.h"
 #include "../dynamic_surfacemesh_global.h" // to use in a dynamic library
 
 //== CLASS DEFINITION =========================================================
@@ -36,11 +35,12 @@ class DYNAMIC_SURFACEMESH_EXPORT Surface_mesh {
 
 /// Bandaid on types
 public:
-    typedef SurfaceMeshTypes::Scalar  Scalar;    
-    typedef SurfaceMeshTypes::Point   Point;
-    typedef SurfaceMeshTypes::Normal  Normal;
-    typedef SurfaceMeshTypes::Color   Color;
-    typedef SurfaceMeshTypes::Texture_coordinate   Texture_coordinate;   
+    typedef double             Scalar;              ///< Scalar type
+    typedef Vector<Scalar,3>   Vector3;             ///< 3D vector type
+    typedef Vector3            Color;               ///< Color type
+    typedef Vector3            Point;               ///< Point type  (used by original Surface_mesh)
+    typedef Vector3            Normal;              ///< Normal type (used by original Surface_mesh)
+    typedef Vector3            Texture_coordinate;  ///< Texture coordinate type
     
 public: //------------------------------------------------------ topology types
 

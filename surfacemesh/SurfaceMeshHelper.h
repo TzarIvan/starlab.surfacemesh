@@ -1,41 +1,13 @@
 #pragma once
 #include "StarlabException.h"
 #include "SurfaceMeshModel.h"
-#include "SurfaceMeshTypes.h"
-#include "helpers/SurfaceMeshQForEachHelpers.h"
 
 /// Simplified access to property types and store names of defined properties
-namespace SurfaceMeshTypes{
-    /// @{ Default property names definition
-        const std::string VPOINT = "v:point";
-        const std::string FNORMAL = "f:normal";
-        const std::string VNORMAL = "v:normal";
-        const std::string VAREA = "v:area";
-        const std::string ELENGTH = "e:length";
-        const std::string VQUALITY = "v:quality";
-        const std::string FAREA = "f:area";
-        const std::string FBARYCENTER="f:barycenter";
-    /// @}
-
-    /// @{ default property names
-    typedef Surface_mesh::Edge                      Edge;
-    typedef Surface_mesh::Halfedge                  Halfedge;
-    typedef Surface_mesh::Vertex                    Vertex;
-    typedef Surface_mesh::Face                      Face;
-    typedef Surface_mesh::Vertex_property<Scalar>   ScalarVertexProperty;
-    typedef Surface_mesh::Vertex_property<Index>    IndexVertexProperty;
-    typedef Surface_mesh::Vertex_property<Vector3>  Vector3VertexProperty;
-    typedef Surface_mesh::Face_property<Scalar>     ScalarFaceProperty;
-    typedef Surface_mesh::Face_property<Vector3>    Vector3FaceProperty;
-    typedef Surface_mesh::Edge_property<bool>       BoolEdgeProperty;    
-    typedef Surface_mesh::Vertex_property<bool>     BoolVertexProperty;
-	typedef Surface_mesh::Face_property<bool>       BoolFaceProperty;
-    typedef Surface_mesh::Edge_property<Scalar>     ScalarEdgeProperty;    
-    typedef Surface_mesh::Halfedge_property<Scalar> ScalarHalfedgeProperty;
+namespace SurfaceMesh{
 
 class SurfaceMeshHelper{
 protected:
-    SurfaceMeshModel* mesh;
+    SurfaceMesh::Model* mesh;
     Vector3VertexProperty points;
     ScalarVertexProperty  varea;  /// NULL
     Vector3VertexProperty vnormal; /// NULL
@@ -44,8 +16,8 @@ protected:
     ScalarEdgeProperty    elenght;  /// NULL
     
 public:
-    SurfaceMeshHelper(SurfaceMeshModel* mesh) : mesh(mesh){
-        points = mesh->vertex_property<Point>("v:point");
+    SurfaceMeshHelper(SurfaceMesh::Model* mesh) : mesh(mesh){
+        points = mesh->vertex_property<Point>(VPOINT);
         vnormal = mesh->get_vertex_property<Vector3>(VNORMAL);
         varea = mesh->get_vertex_property<Scalar>(VAREA);
         fnormal = mesh->get_face_property<Vector3>(FNORMAL);  
@@ -150,7 +122,7 @@ public:
     }
     
     Vector3FaceProperty computeFaceBarycenters(const std::string property=FBARYCENTER){
-        Vector3FaceProperty barycenter = mesh->face_property<Point>(property);
+        Vector3FaceProperty barycenter = mesh->face_property<Vector3>(property);
         foreach(Face fit, mesh->faces()){
             // collect the triangle vertices
             Surface_mesh::Vertex_around_face_circulator vfit = mesh->vertices(fit);

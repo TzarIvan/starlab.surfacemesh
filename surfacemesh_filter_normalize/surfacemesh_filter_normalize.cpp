@@ -1,9 +1,7 @@
 #include "surfacemesh_filter_normalize.h"
 #include "StarlabDrawArea.h"
-#include "SurfaceMeshTypes.h"
-#include "SurfaceMeshHelper.h"
 
-using namespace SurfaceMeshTypes;
+using namespace SurfaceMesh;
 
 QString printBounding(QBox3D box){
     QString retval;
@@ -16,8 +14,6 @@ QString printBounding(QBox3D box){
 }
 
 void surfacemesh_filter_normalize::applyFilter(RichParameterSet*){
-    SurfaceMeshHelper helper( mesh() );
-    
     qDebug() << "Old bounding box: " << printBounding(mesh()->bbox());
     
     /// Just to be sure... update it
@@ -29,7 +25,7 @@ void surfacemesh_filter_normalize::applyFilter(RichParameterSet*){
     QVector3D s = bbox.size();
     Scalar scale = qMax(s.x(),qMax(s.y(),s.z()));
  
-    Vector3VertexProperty points = helper.getVector3VertexProperty("v:point");
+    Vector3VertexProperty points = mesh()->vertex_coordinates();
     foreach(Vertex v, mesh()->vertices()){
         Point& p = points[v];
         p.x() -= offset.x();

@@ -23,9 +23,11 @@
 #include <stdio.h>
 #include <float.h>
 #include <map>
-using namespace SurfaceMeshTypes;
 
 //== IMPLEMENTATION ===========================================================
+
+typedef Surface_mesh::Point Point;
+typedef Surface_mesh::Normal Normal;
 
 // helper function
 template <typename T> void read(FILE* in, T& t)

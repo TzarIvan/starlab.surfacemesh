@@ -5,7 +5,7 @@
 class LocalAnalysisHelper : public SurfaceMeshHelper{
 public:
     LocalAnalysisHelper(SurfaceMeshModel* mesh) : SurfaceMeshHelper(mesh){}
-    void markUmbilic(char* property, StarlabDrawArea* drawarea){
+    void markUmbilic(char* property, DrawArea* drawarea){
         Scalar eps = 0; //1e-3;
                 
         ScalarVertexProperty p = mesh->vertex_property<Scalar>(property);

@@ -2,22 +2,23 @@
 /// otherwise you will end up having to recompile all the surfacemeshplugins when it changes...
 
 #pragma once
-#include "interfaces/InputOutputPlugin.h"
-#include "interfaces/DecoratePlugin.h"
-#include "interfaces/FilterPlugin.h"
-#include "interfaces/ModePlugin.h"
-#include "interfaces/RenderPlugin.h"
-#include "parameters/RichParameterSet.h"
-
+#include "InputOutputPlugin.h"
+#include "DecoratePlugin.h"
+#include "FilterPlugin.h"
+#include "ModePlugin.h"
+#include "RenderPlugin.h"
+#include "RichParameterSet.h"
 #include "SurfaceMeshModel.h"
-#include "SurfaceMeshTypes.h"
+
+/// Allow user to use Qt "foreach" constructs
+#include "helpers/SurfaceMeshQForEachHelpers.h"
 
 namespace{
     /// Is the given model a SurfaceMeshModel?
-    bool isA(Model* model){ return qobject_cast<SurfaceMeshModel*>(model); }
+    bool isA(Model* model){ return qobject_cast<SurfaceMesh::Model*>(model); }
     /// Safely convert to a surfacemesh
-    SurfaceMeshModel* safeCast(Model* model){
-        SurfaceMeshModel* mesh = qobject_cast<SurfaceMeshModel*>(model);
+    SurfaceMesh::Model* safeCast(Model* model){
+        SurfaceMesh::Model* mesh = qobject_cast<SurfaceMesh::Model*>(model);
         if(!mesh) throw StarlabException("Model is not a SurfaceMeshModel");
         return mesh;
     }
@@ -28,26 +29,26 @@ private:
     void save(Model* model,QString path){ save(safeCast(model),path); }
     bool isApplicable(Model* model){ return isA(model); }    
 public:
-    virtual void save(SurfaceMeshModel* model, QString path) = 0;
+    virtual void save(SurfaceMesh::Model* model, QString path) = 0;
 };
 
 class SurfaceMeshRenderPlugin : public RenderPlugin{
 private: 
     bool isApplicable(Model* model){ return isA(model); }
 public: 
-    SurfaceMeshModel* mesh(){ return safeCast(model()); }
+    SurfaceMesh::Model* mesh(){ return safeCast(model()); }
 };
 
 class SurfaceMeshFilterPlugin : public FilterPlugin{
 public:
-    SurfaceMeshModel* mesh(){ return safeCast(model()); }    
+    SurfaceMesh::Model* mesh(){ return safeCast(model()); }    
 private:
     bool isApplicable(Model* model) { return isA(model); }
 };
 
 class SurfaceMeshModePlugin : public ModePlugin{
 public:
-    SurfaceMeshModel* mesh(){ return safeCast(document()->selectedModel()); }
+    SurfaceMesh::Model* mesh(){ return safeCast(document()->selectedModel()); }
 private:
     bool isApplicable() { return isA(document()->selectedModel()); }
 };

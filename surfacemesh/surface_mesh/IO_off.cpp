@@ -22,10 +22,10 @@
 #include "IO.h"
 #include <stdio.h>
 
-using namespace SurfaceMeshTypes;
-
 //== IMPLEMENTATION ===========================================================
 
+typedef Surface_mesh::Point Point;
+typedef Surface_mesh::Normal Normal;
 
 // helper function
 template <typename T> void read(FILE* in, T& t)
@@ -87,10 +87,10 @@ bool read_off(Surface_mesh& mesh, const std::string& filename)
 
 
     // properties
-    Surface_mesh::Vertex_property<Normal>  normals;
-    Surface_mesh::Vertex_property<Texture_coordinate>  texcoords;
-    if (has_normals)   normals   = mesh.vertex_property<Normal>("v:normal");
-    if (has_texcoords) texcoords = mesh.vertex_property<Texture_coordinate>("v:texcoord");
+    Surface_mesh::Vertex_property<Surface_mesh::Normal>  normals;
+    Surface_mesh::Vertex_property<Surface_mesh::Texture_coordinate>  texcoords;
+    if (has_normals)   normals   = mesh.vertex_property<Surface_mesh::Normal>("v:normal");
+    if (has_texcoords) texcoords = mesh.vertex_property<Surface_mesh::Texture_coordinate>("v:texcoord");
 
 
     // if binary: reopen file in binary mode
@@ -247,7 +247,7 @@ bool write_off(const Surface_mesh& mesh, const std::string& filename)
 
 
     // vertices
-    Surface_mesh::Vertex_property<Point> points = mesh.get_vertex_property<Point>("v:point");
+    Surface_mesh::Vertex_property<Surface_mesh::Point> points = mesh.get_vertex_property<Point>("v:point");
     for (Surface_mesh::Vertex_iterator vit=mesh.vertices_begin(); vit!=mesh.vertices_end(); ++vit)
     {
         const Point& p = points[vit];

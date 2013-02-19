@@ -22,8 +22,6 @@
 #include "IO.h"
 #include <stdio.h>
 
-using namespace SurfaceMeshTypes;
-
 //== IMPLEMENTATION ===========================================================
 
 
@@ -59,7 +57,7 @@ bool read_obj(Surface_mesh& mesh, const std::string& filename)
     {
       if (sscanf(s, "v %f %f %f", &x, &y, &z))
       {
-        mesh.add_vertex(Point(x,y,z));
+        mesh.add_vertex(Surface_mesh::Point(x,y,z));
       }
     }
 

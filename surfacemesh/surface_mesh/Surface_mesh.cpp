@@ -21,7 +21,6 @@
 
 #include "Surface_mesh.h"
 #include "IO.h"
-using namespace SurfaceMeshTypes;
 
 //== IMPLEMENTATION ==========================================================
 
@@ -705,7 +704,7 @@ update_face_normals()
 //-----------------------------------------------------------------------------
 
 
-Normal
+Surface_mesh::Normal
 Surface_mesh::
 compute_face_normal(Face f) const
 {
@@ -766,7 +765,7 @@ update_vertex_normals()
 //-----------------------------------------------------------------------------
 
 
-Normal
+Surface_mesh::Normal
 Surface_mesh::
 compute_vertex_normal(Vertex v) const
 {
@@ -817,7 +816,7 @@ compute_vertex_normal(Vertex v) const
 //-----------------------------------------------------------------------------
 
 
-Scalar
+Surface_mesh::Scalar
 Surface_mesh::
 edge_length(Edge e) const
 {
