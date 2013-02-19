@@ -5,7 +5,7 @@
 
 enum DrawElementType{VERT_IDX, FACE_IDX, EDGE_IDX, HDGE_IDX};
 
-using namespace SurfaceMeshTypes;
+using namespace SurfaceMesh;
 
 class surfacemesh_mode_info : public SurfaceMeshModePlugin{
     Q_OBJECT

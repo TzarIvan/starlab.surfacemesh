@@ -2,7 +2,7 @@
 #include "surfacemesh_render_transparent.h"
 #include "surface_mesh/gl_wrappers.h"
 
-using namespace SurfaceMeshTypes;
+using namespace SurfaceMesh;
 
 typedef Surface_mesh::Face_iterator FaceItr;
 typedef std::pair<double, FaceItr> DepthFace;

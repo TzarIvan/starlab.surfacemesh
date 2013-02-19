@@ -2,7 +2,7 @@
 #include "surfacemesh_render_wireframe.h"
 #include "surface_mesh/gl_wrappers.h"
 
-using namespace SurfaceMeshTypes;
+using namespace SurfaceMesh;
 
 void surfacemesh_render_wireframe::init(){
     // qDebug() << "surfacemesh_render_wireframe::init";

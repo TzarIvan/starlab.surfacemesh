@@ -9,7 +9,7 @@
 
 using namespace std;
 using namespace Eigen;
-using namespace SurfaceMeshTypes; 
+using namespace SurfaceMesh; 
 
 #define qRanged(min, v, max) ( qMax(min, qMin(v, max)) )
 #define EPSILON 1e-12

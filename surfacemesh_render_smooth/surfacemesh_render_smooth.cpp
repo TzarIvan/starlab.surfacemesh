@@ -2,7 +2,7 @@
 #include "surfacemesh_render_smooth.h"
 #include "surface_mesh/gl_wrappers.h"
 
-using namespace SurfaceMeshTypes;
+using namespace SurfaceMesh;
 
 void surfacemesh_render_smooth::init(){
     // qDebug() << "surfacemesh_render_flat::init";

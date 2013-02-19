@@ -103,3 +103,6 @@ class DYNAMIC_SURFACEMESH_EXPORT SurfaceMeshModel : public Starlab::Model, publi
 typedef SurfaceMeshModel Model;    
 
 } // namespace
+
+/// Allow user to use Qt "foreach" constructs
+#include "helpers/SurfaceMeshQForEachHelpers.h"

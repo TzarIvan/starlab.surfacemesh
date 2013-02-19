@@ -10,9 +10,6 @@
 #include "RichParameterSet.h"
 #include "SurfaceMeshModel.h"
 
-/// Allow user to use Qt "foreach" constructs
-#include "helpers/SurfaceMeshQForEachHelpers.h"
-
 /// Legal here as this is included in plugins
 using namespace SurfaceMesh;
 

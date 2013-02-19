@@ -1,7 +1,6 @@
 #include <QTreeWidgetItem>
 
 #include "SurfaceMeshModel.h"
-#include "helpers/SurfaceMeshQForEachHelpers.h"
 using namespace SurfaceMesh;
 
 SurfaceMeshModel::SurfaceMeshModel(QString path, QString name) : Model(path, name){
