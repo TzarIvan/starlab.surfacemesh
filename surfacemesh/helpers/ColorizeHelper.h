@@ -1,7 +1,6 @@
 #pragma once
 #include "ColorMap.h"
 #include "SurfaceMeshModel.h"
-#include "SurfaceMeshTypes.h"
 #include "StarlabException.h"
 #include "SurfaceMeshHelper.h"
 #include "float.h"

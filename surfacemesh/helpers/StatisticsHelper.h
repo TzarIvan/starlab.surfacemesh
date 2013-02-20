@@ -1,7 +1,6 @@
 #pragma once
 #include <float.h>
 #include "SurfaceMeshHelper.h"
-#include "SurfaceMeshTypes.h"
 
 #ifdef WIN32
 #define NAN std::numeric_limits<Scalar>::signaling_NaN()

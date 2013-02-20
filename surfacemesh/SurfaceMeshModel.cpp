@@ -40,6 +40,11 @@ void SurfaceMeshModel::updateBoundingBox(){
         _bbox.unite( points[vit] );
 }
 
+void SurfaceMeshModel::remove_vertex(Vertex v){
+    this->vdeleted_[v] = true;
+    this->garbage_ = true;
+}
+
 SurfaceMeshForEachHalfedgeHelper SurfaceMeshModel::halfedges(){
     return SurfaceMeshForEachHalfedgeHelper(this);
 }
