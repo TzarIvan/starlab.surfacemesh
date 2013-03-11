@@ -35,6 +35,10 @@
     #include <QVector3D>
 #endif
 
+#ifdef EIGEN
+    #include <Eigen/Dense>
+#endif
+
 #ifdef WIN32
     #undef min
     #undef max
@@ -50,6 +54,14 @@ template <typename Scalar, int N>
 class Vector
 {
 public:
+#ifdef EIGEN
+    Vector(const Eigen::Matrix<Scalar, N, 1>& v){
+        Eigen::Map<Eigen::Matrix<Scalar, N, 1> >(data_) = v;
+    }
+    operator Eigen::Matrix<Scalar, N, 1>(){
+        return Eigen::Map<Eigen::Matrix<Scalar, N, 1> >(data_);
+    }
+#endif
     /// Qt Special stuff
 #ifdef QT_CORE_LIB    
     Vector(QColor color){
