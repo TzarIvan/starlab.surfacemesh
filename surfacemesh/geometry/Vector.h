@@ -61,6 +61,7 @@ public:
     operator Eigen::Matrix<Scalar, N, 1>(){
         return Eigen::Map<Eigen::Matrix<Scalar, N, 1> >(data_);
     }
+
 #endif
     /// Qt Special stuff
 #ifdef QT_CORE_LIB    
