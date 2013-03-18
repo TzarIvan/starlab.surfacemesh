@@ -101,6 +101,10 @@ class DYNAMIC_SURFACEMESH_EXPORT SurfaceMeshModel : public Starlab::Model, publi
     /// @{ forced garbage collection!!
         void garbage_collection(){ garbage_ = true; Surface_mesh::garbage_collection(); }
     /// @}
+
+    /// @{ Extra exposed functionality
+        void remove_vertex(Vertex v);
+    /// @}
 };
 
 /// Allows you to refer to SurfaceMeshModel as "SurfaceMesh::Model"
@@ -112,4 +116,4 @@ typedef SurfaceMeshModel Model;
 #include "helpers/SurfaceMeshQForEachHelpers.h"
 
 /// Append namespace to name
-typedef SurfaceMesh::Model SurfaceMeshModel;
+//typedef SurfaceMesh::Model SurfaceMeshModel; // this causes ambiguous case for compiler

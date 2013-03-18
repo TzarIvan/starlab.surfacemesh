@@ -1,7 +1,6 @@
 #pragma once
 #include "ColorMap.h"
 #include "SurfaceMeshModel.h"
-#include "SurfaceMeshTypes.h"
 #include "StarlabException.h"
 #include "SurfaceMeshHelper.h"
 #include "float.h"
@@ -53,7 +52,7 @@ public:
             ecolor[eit] = cmap->color(escalar[eit]);
     }
     
-    void vscalar_to_vcolor(const string property="v:quality"){
+    void vscalar_to_vcolor(const std::string property="v:quality"){
         if(!mesh->has_vertex_property<Scalar>(property)) 
             throw StarlabException("Mesh doesn't have %s how do you expect me to colorize it?", property.c_str());
         Surface_mesh::Vertex_property<Scalar> vscalar = mesh->get_vertex_property<Scalar>(property);
