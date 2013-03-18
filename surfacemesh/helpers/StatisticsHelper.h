@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <float.h>
 #include "SurfaceMeshHelper.h"
 
@@ -6,7 +7,7 @@
 #define NAN std::numeric_limits<Scalar>::signaling_NaN()
 #endif
 
-namespace SurfaceMeshTypes{
+namespace SurfaceMesh{
 
 struct MeanHelper{
 private:
@@ -52,7 +53,7 @@ class StatisticsHelper : public virtual SurfaceMeshHelper{
 public:
     StatisticsHelper(SurfaceMeshModel* mesh) : SurfaceMeshHelper(mesh){}
         
-    Scalar mean(const string property){
+    Scalar mean(const std::string property){
         Scalar min=NAN,max=NAN,mean=NAN,var=NAN;
 
         /// Use first letter to pick and retrieve property
@@ -63,7 +64,7 @@ public:
         return mean;
     }
    
-    QString statistics(const string property){
+    QString statistics(const std::string property){
         Scalar min=NAN,max=NAN,mean=NAN,var=NAN;
         
         /// Use first letter to pick and retrieve property
