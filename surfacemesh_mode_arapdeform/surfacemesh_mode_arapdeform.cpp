@@ -413,7 +413,7 @@ void surfacemesh_mode_arapdeform::compute_geodesic_anchors()
 
     // Compute distance
     QString g = "Geodesic distance: heat kernel";
-    pluginManager()->filterPlugins[g]->applyFilter(NULL);
+    pluginManager()->getFilter(g)->applyFilter(NULL);
     ScalarVertexProperty geo_dist = mesh()->vertex_property<Scalar>("v:uniformDistance", 0);
 
     // Threshold and assign anchors faces

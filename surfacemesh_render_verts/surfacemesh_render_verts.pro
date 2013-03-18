@@ -2,6 +2,7 @@ load($$[STARLAB])
 load($$[SURFACEMESH])
 StarlabTemplate(plugin)
 
-HEADERS = surfacemesh_render_verts.h
-SOURCES = surfacemesh_render_verts.cpp
-RESOURCES = surfacemesh_render_verts.qrc
+HEADERS = plugin.h
+SOURCES = plugin.cpp
+RESOURCES = plugin.qrc
+OTHER_FILES += cloud.png

@@ -10,9 +10,7 @@ private:
     std::vector<unsigned int> triangles; 
     
 public: 
-    RenderPlugin* factory(){ return new surfacemesh_render_wireframe(); }
     QString name() { return "Flat Shading"; }
-    QIcon icon(){ return QIcon(":/surfacemesh_render_flat.png"); }
-    void init();
-    void render();
+    QIcon icon(){ return QIcon(":/icons/flat_shading.png"); }
+    Renderer* instance();
 };

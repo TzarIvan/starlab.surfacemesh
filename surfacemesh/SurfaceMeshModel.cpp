@@ -60,6 +60,20 @@ SurfaceMeshForEachOneRingEdgesHelper SurfaceMeshModel::onering_hedges(Surface_me
     return SurfaceMeshForEachOneRingEdgesHelper(this,v);
 }
 
+Vector3VertexProperty SurfaceMeshModel::vertex_coordinates(bool create_if_missing){
+    if(create_if_missing)
+        return vertex_property<Vector3>(VPOINT,Vector3(0.0,0.0,0.0));
+    else
+        return get_vertex_property<Vector3>(VPOINT);
+}
+
+Vector3VertexProperty SurfaceMeshModel::vertex_normals(bool create_if_missing){
+    if(create_if_missing)
+        return vertex_property<Vector3>(VNORMAL,Vector3(0.0,0.0,0.0));
+    else
+        return get_vertex_property<Vector3>(VNORMAL);
+}
+
 QDebug operator<< (QDebug d, const Surface_mesh::Edge& edge) {
     d.nospace() << "Edge[" << edge.idx() << "]";
     return d.space();
