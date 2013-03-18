@@ -1,6 +1,10 @@
 load($$[STARLAB])
 load($$[SURFACEMESH])
+load($$[EIGEN])
 StarlabTemplate(plugin)
+
+# linux does not have GLU included in += opengl
+unix:!mac: LIBS += -lGLU
 
 HEADERS = plugin.h
 SOURCES = plugin.cpp

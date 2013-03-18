@@ -114,8 +114,8 @@ bool modded_read_obj(SurfaceMeshModel& mesh, const std::string& filename){
                 int nread = sscanf(s, "vn %f %f %f", &nx, &ny, &nz);
                 assert(nread==3);
                 normals[Vertex(ncounter)] = Vector3(nx,ny,nz);
-                ncounter++;    
                 // qDebug() << normals[Vertex(ncounter)];                
+                ncounter++;    
             }
         }        
         
