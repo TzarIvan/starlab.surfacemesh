@@ -17,11 +17,13 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
     bool use_splats;
     double splat_size;
     bool lights_on;
+    bool double_side;
     Vector3VertexProperty points;
     Vector3VertexProperty normals;
     
     void initParameters(){
         parameters()->addParam( new RichBool("lights_on", true, "Enable illumination") );
+        parameters()->addParam( new RichBool("double_side", true, "Enable double side illumination") );
         parameters()->addParam( new RichFloat("gl_point_size", 3, "GLPoint size") );
         parameters()->addParam( new RichBool("use_splats", false, "Use disk-splats") );
         parameters()->addParam( new RichFloat("splat_size", .015, "Disk splats size") );
@@ -33,6 +35,7 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
         gl_point_size = parameters()->getFloat("gl_point_size");
         use_splats = parameters()->getBool("use_splats");
         lights_on = parameters()->getBool("lights_on");
+        double_side = parameters()->getBool("double_side");
         splat_size = parameters()->getFloat("splat_size");
     }
     
@@ -63,15 +66,18 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
         
         /// If you do, you can either shade points, or use oriented splats
         else {
-            glEnable(GL_LIGHTING);           
+            glEnable(GL_LIGHTING);
+            glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, double_side);
             if(use_splats){
                 foreach(Vertex v, mesh()->vertices()){
                     Eigen::Vector3d n = normals[v];
                     glPushMatrix();
                         double theta = acos( zaxis.dot(n) ) * 180 / PI;
-                        Eigen::Vector3d crossv = zaxis.cross(n);
                         glTranslatef( points[v].x(), points[v].y(), points[v].z() );
-                        glRotatef( theta, crossv[0], crossv[1], crossv[2] );
+                        if(theta > 1e-8 || theta < -1e-8) {
+                            Eigen::Vector3d crossv = (zaxis.cross(n)).normalized();
+                            glRotatef( theta, crossv[0], crossv[1], crossv[2] );
+                        }
                         gluDisk( q, 0, splat_size/2.0, 20, 1 );
                     glPopMatrix();            
                 }
