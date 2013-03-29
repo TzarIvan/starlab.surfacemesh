@@ -40,6 +40,11 @@ void SurfaceMeshModel::updateBoundingBox(){
         _bbox.unite( points[vit] );
 }
 
+void SurfaceMeshModel::remove_vertex(Vertex v){
+    this->vdeleted_[v] = true;
+    this->garbage_ = true;
+}
+
 SurfaceMeshForEachHalfedgeHelper SurfaceMeshModel::halfedges(){
     return SurfaceMeshForEachHalfedgeHelper(this);
 }
@@ -58,6 +63,20 @@ SurfaceMeshForEachFaceHelper SurfaceMeshModel::faces(){
 
 SurfaceMeshForEachOneRingEdgesHelper SurfaceMeshModel::onering_hedges(Surface_mesh::Vertex v){
     return SurfaceMeshForEachOneRingEdgesHelper(this,v);
+}
+
+Vector3VertexProperty SurfaceMeshModel::vertex_coordinates(bool create_if_missing){
+    if(create_if_missing)
+        return vertex_property<Vector3>(VPOINT,Vector3(0.0,0.0,0.0));
+    else
+        return get_vertex_property<Vector3>(VPOINT);
+}
+
+Vector3VertexProperty SurfaceMeshModel::vertex_normals(bool create_if_missing){
+    if(create_if_missing)
+        return vertex_property<Vector3>(VNORMAL,Vector3(0.0,0.0,0.0));
+    else
+        return get_vertex_property<Vector3>(VNORMAL);
 }
 
 QDebug operator<< (QDebug d, const Surface_mesh::Edge& edge) {

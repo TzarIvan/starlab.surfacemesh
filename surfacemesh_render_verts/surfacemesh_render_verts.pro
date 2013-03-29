@@ -1,7 +1,12 @@
 load($$[STARLAB])
 load($$[SURFACEMESH])
+load($$[EIGEN])
 StarlabTemplate(plugin)
 
-HEADERS = surfacemesh_render_verts.h
-SOURCES = surfacemesh_render_verts.cpp
-RESOURCES = surfacemesh_render_verts.qrc
+# linux does not have GLU included in += opengl
+unix:!mac: LIBS += -lGLU
+
+HEADERS = plugin.h
+SOURCES = plugin.cpp
+RESOURCES = plugin.qrc
+OTHER_FILES += cloud.png

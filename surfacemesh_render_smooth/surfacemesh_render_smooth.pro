@@ -2,6 +2,12 @@ load($$[STARLAB])
 load($$[SURFACEMESH])
 StarlabTemplate(plugin)
 
-HEADERS = surfacemesh_render_smooth.h
-SOURCES = surfacemesh_render_smooth.cpp
-RESOURCES = surfacemesh_render_smooth.qrc
+HEADERS = \
+    plugin.h
+SOURCES = \
+    plugin.cpp
+RESOURCES = \
+    plugin.qrc
+
+OTHER_FILES += \
+    smooth_shading.png

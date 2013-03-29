@@ -94,8 +94,16 @@ class DYNAMIC_SURFACEMESH_EXPORT SurfaceMeshModel : public Starlab::Model, publi
     /// @}
 
     /// @{ Access to default properties
-        Vector3VertexProperty vertex_coordinates(){ return get_vertex_property<Vector3>(VPOINT); }
-        Vector3VertexProperty vertex_normals(){ return get_vertex_property<Vector3>(VNORMAL); }
+        Vector3VertexProperty vertex_coordinates(bool create_if_missing=false);
+        Vector3VertexProperty vertex_normals(bool create_if_missing=false);
+    /// @}
+        
+    /// @{ forced garbage collection!!
+        void garbage_collection(){ garbage_ = true; Surface_mesh::garbage_collection(); }
+    /// @}
+
+    /// @{ Extra exposed functionality
+        void remove_vertex(Vertex v);
     /// @}
 };
 
@@ -106,3 +114,6 @@ typedef SurfaceMeshModel Model;
 
 /// Allow user to use Qt "foreach" constructs
 #include "helpers/SurfaceMeshQForEachHelpers.h"
+
+/// Append namespace to name
+//typedef SurfaceMesh::Model SurfaceMeshModel; // this causes ambiguous case for compiler

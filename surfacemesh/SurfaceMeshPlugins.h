@@ -32,11 +32,14 @@ public:
     virtual void save(SurfaceMesh::Model* model, QString path) = 0;
 };
 
+class SurfaceMeshRenderer : public Renderer{
+public:
+    SurfaceMeshModel* mesh(){ return safeCast(model()); }
+};
+
 class SurfaceMeshRenderPlugin : public RenderPlugin{
 private: 
     bool isApplicable(Starlab::Model* model){ return isA(model); }
-public: 
-    SurfaceMesh::Model* mesh(){ return safeCast(model()); }
 };
 
 class SurfaceMeshFilterPlugin : public FilterPlugin{

@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>surfacemesh_render_transparent.png</file>
+        <file>smooth_shading.png</file>
     </qresource>
 </RCC>

@@ -2,6 +2,12 @@ load($$[STARLAB])
 load($$[SURFACEMESH])
 StarlabTemplate(plugin)
 
-HEADERS = surfacemesh_render_transparent.h
-SOURCES = surfacemesh_render_transparent.cpp
-RESOURCES = surfacemesh_render_transparent.qrc
+HEADERS = \
+    plugin.h
+SOURCES = \
+    plugin.cpp
+RESOURCES = \
+    plugin.qrc
+
+OTHER_FILES += \
+    transparent_mesh.png

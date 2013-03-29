@@ -1,6 +1,5 @@
 #pragma once
 #include "SurfaceMeshModel.h"
-#include "SurfaceMeshTypes.h"
 #include "StarlabException.h"
 #include "SurfaceMeshHelper.h"
 

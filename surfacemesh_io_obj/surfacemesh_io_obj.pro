@@ -2,5 +2,7 @@ load($$[STARLAB])
 load($$[SURFACEMESH])
 StarlabTemplate(plugin)
 
-HEADERS += surfacemesh_io_obj.h
-SOURCES += surfacemesh_io_obj.cpp
+HEADERS += \
+    plugin.h
+SOURCES += \
+    plugin.cpp

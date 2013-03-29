@@ -1,9 +1,9 @@
 #include "surfacemesh_filter_ballpivoting.h"
-#include "SurfaceMeshTypes.h"
+#include "SurfaceMeshModel.h"
 #include "RichParameterSet.h"
 #include "ball_pivoting.h"
 
-using namespace SurfaceMeshTypes;
+using namespace SurfaceMesh;
 
 void surfacemesh_filter_ballpivoting::initParameters(RichParameterSet* pars){
     pars->addParam( new RichFloat("radius", -1, "Ball radius", "Use -1 to use sampling (recommended), 0 for auto-guess."));

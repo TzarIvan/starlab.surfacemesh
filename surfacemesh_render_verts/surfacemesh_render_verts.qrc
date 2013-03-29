@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>surfacemesh_render_verts.png</file>
-    </qresource>
-</RCC>
