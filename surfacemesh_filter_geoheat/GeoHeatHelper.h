@@ -30,6 +30,8 @@ public:
     SparseMatrix<Scalar>    Lc_;
     CholmodSolver heat_flow, poisson_solver;
 
+	Scalar t_factor;
+
 public:
     GeoHeatHelper(SurfaceMeshModel* mesh) : SurfaceMeshHelper(mesh)
     {
@@ -46,6 +48,8 @@ public:
         vfunction   = mesh->vertex_property<Scalar> ("v:function", 0);
         ecot        = mesh->edge_property<Scalar>   ("e:cotan", 0);
         fgradient   = mesh->face_property<Vector3>  ("f:gradient", Vector3(0));
+
+		t_factor = 1.0;
     }
 
     ~GeoHeatHelper()
@@ -95,7 +99,7 @@ public:
         }
 
         avg /= count;
-        return avg * avg;
+        return (avg * avg) * t_factor;
     }
 
     VectorXd u0(const QSet<Vertex> & vidx)
