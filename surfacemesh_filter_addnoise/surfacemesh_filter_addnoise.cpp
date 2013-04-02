@@ -16,9 +16,11 @@ QString printBounding(QBox3D box){
 void surfacemesh_filter_addnoise::initParameters(RichParameterSet *pars){
     QStringList modes;
     modes << "Normal Noise";
+    modes << "Outliers";
     modes << "Environment Noise";
 
     pars->addParam( new RichFloat("noiseperc", .01,"Noise amount [0..1]", "Movement of vertices w.r.t. bounding box diagonal") );
+    pars->addParam( new RichFloat("noisepct", .01, "Pourcentage of outliers") );
     pars->addParam( new RichStringSet("mode", modes, "Noise Profile", "Which type of noise we add to the system"));
 }
 
@@ -34,6 +36,20 @@ void surfacemesh_filter_addnoise::applyFilter(RichParameterSet* pars){
             points[v].x() += ( (drand48()-.5) * noise );
             points[v].y() += ( (drand48()-.5) * noise );
             points[v].z() += ( (drand48()-.5) * noise );
+        }
+    }
+
+    if( pars->getString("mode") == "Outliers" ){
+        foreach(Vertex v, mesh()->vertices()){
+            double p = pars->getFloat("noisepct");
+            Vector3VertexProperty points = mesh()->vertex_property<Vector3>(VPOINT);
+            double prob = drand48();
+            if(prob <= p)
+            {
+                points[v].x() += ( (drand48()-.5) * noise );
+                points[v].y() += ( (drand48()-.5) * noise );
+                points[v].z() += ( (drand48()-.5) * noise );
+            }
         }
     }
 
