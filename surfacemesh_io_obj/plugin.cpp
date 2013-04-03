@@ -1,4 +1,6 @@
 #include "plugin.h"
+#include "SurfaceMeshNormalsHelper.h";
+
 using namespace SurfaceMesh;
 
 bool modded_read_obj(SurfaceMeshModel& mesh, const std::string& filename){
@@ -128,9 +130,16 @@ bool modded_read_obj(SurfaceMeshModel& mesh, const std::string& filename){
 }
 
 Model* surfacemesh_io_obj::open(QString path) {
-    /// Load the mesh (copy&paste from Surface_mesh)
     SurfaceMeshModel* mesh = new SurfaceMeshModel(path);
-    modded_read_obj(*mesh, qPrintable(path));
+    modded_read_obj(*mesh, qPrintable(path)); ///< ~copy/paste from Surface_mesh
+    
+    /// If they are not loaded from file, compute normals
+    NormalsHelper h(mesh);
+    if(!mesh->has_face_normals())
+        h.compute_face_normals();
+    if(!mesh->has_vertex_normals()) 
+        h.compute_vertex_normals();        
+        
     return mesh;
 }
 
