@@ -93,6 +93,11 @@ class DYNAMIC_SURFACEMESH_EXPORT SurfaceMeshModel : public Starlab::Model, publi
         SurfaceMeshForEachOneRingEdgesHelper onering_hedges(Vertex v);
     /// @}
 
+    /// @{ Query existence of basic properties
+        bool has_vertex_normals(){ return has_vertex_property<Vector3>(VNORMAL); }
+        bool has_face_normals(){ return has_face_property<Vector3>(FNORMAL); }
+    /// @}
+        
     /// @{ Access to default properties
         Vector3VertexProperty vertex_coordinates(bool create_if_missing=false);
         Vector3VertexProperty vertex_normals(bool create_if_missing=false);

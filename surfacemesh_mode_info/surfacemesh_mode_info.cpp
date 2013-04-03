@@ -4,6 +4,7 @@
 #include "FindDialog.h"
 #include "float.h"
 #include <qgl.h>
+#include "SurfaceMeshNormalsHelper.h"
 
 using namespace qglviewer;
 
@@ -29,9 +30,11 @@ void surfacemesh_mode_info::update()
 	// to do: mesh needs to be consistent with selected mesh
 	SurfaceMeshHelper h(mesh());
 
-	points = h.getVector3VertexProperty(VPOINT);
+    SurfaceMesh::NormalsHelper nh(mesh());
+    faceNormals = nh.compute_face_normals();
+
+	points = mesh()->vertex_coordinates();
 	faceCenters = h.computeFaceBarycenters();
-	faceNormals = h.computeFaceNormals();
 	faceAreas = h.computeFaceAreas();
 	elengs = h.computeEdgeLengths();
 

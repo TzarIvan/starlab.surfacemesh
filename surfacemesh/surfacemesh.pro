@@ -18,7 +18,8 @@ HEADERS += SurfaceMeshModel.h \
     helpers/ColorizeHelper.h \
     helpers/DoUndoHelper.h \
     helpers/LocalAnalysisHelper.h \
-    helpers/StatisticsHelper.h
+    helpers/StatisticsHelper.h \
+    helpers/SurfaceMeshNormalsHelper.h
  
 SOURCES += SurfaceMeshModel.cpp
 

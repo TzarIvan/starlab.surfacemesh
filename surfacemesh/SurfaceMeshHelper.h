@@ -5,6 +5,7 @@
 /// Simplified access to property types and store names of defined properties
 namespace SurfaceMesh{
 
+/// @note when inheriting from this class, always use "class Subclass : public virtual SurfaceMeshHelper{}"
 class SurfaceMeshHelper{
 protected:
     SurfaceMesh::Model* mesh;
@@ -52,16 +53,6 @@ public:
         return mesh->face_property<Vector3>(property,init);
     }
     
-    Surface_mesh::Face_property<Vector3> computeFaceNormals(std::string property=FNORMAL){
-        fnormal = mesh->get_face_property<Vector3>(property);
-        /// See: mesh->update_face_normals();
-        Surface_mesh::Face_iterator fit, fend=mesh->faces_end();
-        for (fit=mesh->faces_begin(); fit!=fend; ++fit)
-            if (!mesh->is_deleted(fit))
-                fnormal[fit] = mesh->compute_face_normal(fit);
-        return fnormal;
-    }
-
 	Surface_mesh::Face_property<Scalar> computeFaceAreas(std::string property=FAREA){
 		farea = mesh->face_property<Scalar>(property);
 

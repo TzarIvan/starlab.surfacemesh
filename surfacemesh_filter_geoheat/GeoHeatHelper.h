@@ -1,6 +1,7 @@
 #pragma once
 #include "SurfaceMeshHelper.h"
 #include <float.h>
+#include "SurfaceMeshNormalsHelper.h"
 
 // Eigne matrix library
 #include <Eigen/Core>
@@ -33,11 +34,12 @@ public:
 	Scalar t_factor;
 
 public:
-    GeoHeatHelper(SurfaceMeshModel* mesh) : SurfaceMeshHelper(mesh)
-    {
+    GeoHeatHelper(SurfaceMeshModel* mesh) : SurfaceMeshHelper(mesh){
+        SurfaceMesh::NormalsHelper h(mesh);
+        
         points  = this->getVector3VertexProperty(VPOINT);
         varea   = this->computeVertexVoronoiArea();
-        fnormal = this->computeFaceNormals();
+        fnormal = h.compute_face_normals();
         farea   = this->computeFaceAreas();
         elenght = this->computeEdgeLengths();
 
