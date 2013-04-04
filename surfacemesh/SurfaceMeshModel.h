@@ -124,13 +124,13 @@ typedef SurfaceMeshModel Model;
 
 /// @{ Casting & Type-checking
     /// @brief is the given starlab model a SurfaceMeshModel?
-    bool is_a(StarlabModel* model);
+    DYNAMIC_SURFACEMESH_EXPORT bool is_a(StarlabModel* model);
     /// @brief safely cast to SurfaceMesh throwing exception on fail
-    SurfaceMeshModel* safe_cast(Starlab::Model* model);
+    DYNAMIC_SURFACEMESH_EXPORT SurfaceMeshModel* safe_cast(Starlab::Model* model);
     /// @obsolete use safe_cast
-    SurfaceMeshModel* safeCast(Starlab::Model* model);
+    DYNAMIC_SURFACEMESH_EXPORT SurfaceMeshModel* safeCast(Starlab::Model* model);
     /// @obsolete use is_a
-    bool isA(StarlabModel* model);    
+    DYNAMIC_SURFACEMESH_EXPORT bool isA(StarlabModel* model);
 /// @}
 
 } // namespace
