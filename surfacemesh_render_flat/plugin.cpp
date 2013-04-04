@@ -1,10 +1,13 @@
-#include <qgl.h>
 #include "plugin.h"
+Q_EXPORT_PLUGIN(surfacemesh_render_wireframe)
+
+#include <QElapsedTimer>
+#include <qgl.h>
 #include "surface_mesh/gl_wrappers.h"
 
 using namespace SurfaceMesh;
 
-class WireframeRenderer : public SurfaceMeshRenderer{
+class FlatRenderer : public SurfaceMeshRenderer{
     void init(){
         // qDebug() << "surfacemesh_render_flat::init";
         mesh()->update_face_normals();
@@ -49,6 +52,21 @@ class WireframeRenderer : public SurfaceMeshRenderer{
         /// Set the color
         glColor4d(mesh()->color.redF(), mesh()->color.greenF(), mesh()->color.blueF(), mesh()->color.alphaF());
         
+        /// Render loop  @todo convert to buffers
+        foreach(Face f, mesh()->faces()){
+            glBegin(GL_POLYGON);
+                if(has_face_color) 
+                    gl::glColor(fcolor[f]);
+                gl::glNormal(fnormals[f]);
+                foreach(Vertex v, mesh()->vertices(f))
+                    gl::glVertex(points[v]);
+            glEnd();
+        }
+        
+#if 0 
+        /// Older code not using foreach
+        QElapsedTimer timer;
+        timer.restart();
         /// @todo convert to "foreach"
         Surface_mesh::Face_iterator fit, fend=mesh()->faces_end();
         Surface_mesh::Vertex_around_face_circulator fvit, fvend;
@@ -67,9 +85,10 @@ class WireframeRenderer : public SurfaceMeshRenderer{
                 while (++fvit != fvend);
             glEnd();
         }
+        qDebug() << "TRADITIONAL" << timer.elapsed();
+#endif
     }
 };
 
-Renderer *surfacemesh_render_wireframe::instance(){ return new WireframeRenderer(); }
+Renderer *surfacemesh_render_wireframe::instance(){ return new FlatRenderer(); }
 
-Q_EXPORT_PLUGIN(surfacemesh_render_wireframe)
