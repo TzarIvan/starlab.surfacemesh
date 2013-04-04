@@ -46,8 +46,8 @@ class SmoothRenderer : public SurfaceMeshRenderer{
         // setup vertex arrays    
         gl::glVertexPointer(points.data());
         gl::glNormalPointer(vnormals.data());
-        if(has_vertex_color) gl::glColorPointer(vcolor.data());
-        else glColor4dv(Vec4d(0.75,0.75,0.75,1.0));
+        if(has_vertex_color) 
+            gl::glColorPointer(vcolor.data());
     
         glEnable(GL_LIGHTING);
         glShadeModel(GL_SMOOTH);
