@@ -13,17 +13,6 @@
 /// Legal here as this is included in plugins
 using namespace SurfaceMesh;
 
-namespace{
-    /// Is the given model a SurfaceMeshModel?
-    bool isA(Starlab::Model* model){ return qobject_cast<SurfaceMesh::Model*>(model); }
-    /// Safely convert to a surfacemesh
-    SurfaceMesh::Model* safeCast(Starlab::Model* model){
-        SurfaceMesh::Model* mesh = qobject_cast<SurfaceMesh::Model*>(model);
-        if(!mesh) throw StarlabException("Model is not a SurfaceMeshModel");
-        return mesh;
-    }
-}
-
 class SurfaceMeshInputOutputPlugin : public InputOutputPlugin{
 private: 
     void save(Starlab::Model* model,QString path){ save(safeCast(model),path); }

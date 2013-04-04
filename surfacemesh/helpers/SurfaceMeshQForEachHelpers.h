@@ -1,6 +1,8 @@
 #pragma once
+#include "surface_mesh/Surface_mesh.h"
 
 namespace SurfaceMesh{
+class SurfaceMeshModel;
 
 /// @see SurfaceMeshModel::halfedges()
 class SurfaceMeshForEachHalfedgeHelper{
@@ -53,6 +55,51 @@ public:
     const_iterator begin() const{return const_iterator(m,BEGIN);}
     const_iterator end() const{return const_iterator(m,END);}   
 };
+
+/// Performance loss: FOREACH 47ms, TRADITIONAL 39ms
+class SurfaceMeshForEachVertexOnFaceHelper : public Surface_mesh::Vertex_around_face_circulator{
+private:
+    typedef Surface_mesh::Vertex_around_face_circulator Super;
+    typedef SurfaceMeshModel::Vertex Vertex;
+    typedef SurfaceMeshModel::Face Face;
+public:
+    /// @internal used by Qt::foreach
+    typedef SurfaceMeshForEachVertexOnFaceHelper const_iterator;
+private:
+    SurfaceMeshModel* _m;
+    Face _f;
+    bool disbelieve;
+public:
+    /// This let the traditional Vertex_around_face_circulator pass through
+    SurfaceMeshForEachVertexOnFaceHelper(SurfaceMeshModel* m, Face f) 
+        : Vertex_around_face_circulator(m, f),_m(m),_f(f),disbelieve(false){}
+public:
+    /// In first iteration begin=end as we are in a loop, this operator prevents this from happening
+    bool operator!=(const SurfaceMeshForEachVertexOnFaceHelper& rhs) const{
+        bool diffs = Super::operator !=(rhs);
+        if(!diffs && disbelieve) return true;
+        return diffs;
+    }
+    /// after first increment I am not at the origin anymore
+    Vertex_around_face_circulator& operator++(){
+        disbelieve=false; 
+        return Super::operator ++();
+    }
+    /// add dereferencing to "Vertex_around_face_circulator"
+    const Vertex operator*(){ 
+        return this->operator Vertex(); 
+    }
+public:
+    /// @internal used by Qt::foreach
+    const_iterator begin() const{return const_iterator(_m,_f,true);}
+    /// @internal used by Qt::foreach
+    const_iterator end() const{return const_iterator(_m,_f,false);}
+private:
+    /// @internal used by Qt::foreach
+    SurfaceMeshForEachVertexOnFaceHelper(SurfaceMeshModel* m, Face f, bool disbelieve)
+        : Vertex_around_face_circulator(m, f),_m(m),_f(f),disbelieve(disbelieve){}   
+};
+
 /// @see SurfaceMeshModel::oneringEdges()
 class SurfaceMeshForEachOneRingEdgesHelper{
 private:

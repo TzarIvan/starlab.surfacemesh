@@ -3,6 +3,22 @@
 #include "SurfaceMeshModel.h"
 using namespace SurfaceMesh;
 
+namespace SurfaceMesh{
+    bool isA(StarlabModel* model){
+        SurfaceMeshModel* mesh = qobject_cast<SurfaceMeshModel*>(model);
+        return (mesh!=NULL);
+    }
+    SurfaceMeshModel* safe_cast(StarlabModel* model){
+        SurfaceMeshModel* mesh = qobject_cast<SurfaceMeshModel*>(model);
+        if(!mesh) 
+            throw StarlabException("Model is not a SurfaceMeshModel");
+        return mesh;
+    }
+    SurfaceMeshModel* safeCast(StarlabModel* model){
+        return safe_cast(model);
+    }    
+}
+
 SurfaceMeshModel::SurfaceMeshModel(QString path, QString name) : Model(path, name){
     /// Allocate rendering system
     this->color = Qt::darkGray;
@@ -51,6 +67,10 @@ SurfaceMeshForEachHalfedgeHelper SurfaceMeshModel::halfedges(){
 
 SurfaceMeshForEachVertexHelper SurfaceMeshModel::vertices(){
     return SurfaceMeshForEachVertexHelper(this);
+}
+
+SurfaceMeshForEachVertexOnFaceHelper SurfaceMeshModel::vertices(Surface_mesh::Face f){
+    return SurfaceMeshForEachVertexOnFaceHelper(this,f);
 }
 
 SurfaceMeshForEachEdgeHelper SurfaceMeshModel::edges(){

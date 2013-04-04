@@ -8,7 +8,7 @@
 #include "surface_mesh/Surface_mesh.h"
 
 namespace SurfaceMesh{
-
+          
 /// @{ Default types 
     typedef Surface_mesh::Scalar    Scalar;              ///< Scalar type
     typedef Surface_mesh::Vector3   Vector3;             ///< 3D Vector type
@@ -32,6 +32,7 @@ namespace SurfaceMesh{
 /// @}
 
 /// @{ Forward declaration of helpers (reduces clutter of this class header)
+    class SurfaceMeshForEachVertexOnFaceHelper;
     class SurfaceMeshForEachVertexHelper;
     class SurfaceMeshForEachEdgeHelper;
     class SurfaceMeshForEachOneRingEdgesHelper;
@@ -69,7 +70,7 @@ namespace SurfaceMesh{
     typedef Surface_mesh::Halfedge_property<Scalar> ScalarHalfedgeProperty;
 /// @}
     
-class DYNAMIC_SURFACEMESH_EXPORT SurfaceMeshModel : public Starlab::Model, public Surface_mesh{
+class DYNAMIC_SURFACEMESH_EXPORT SurfaceMeshModel : public StarlabModel, public Surface_mesh{
     Q_OBJECT
     Q_INTERFACES(Starlab::Model)
     
@@ -77,20 +78,26 @@ class DYNAMIC_SURFACEMESH_EXPORT SurfaceMeshModel : public Starlab::Model, publi
     public:
         SurfaceMeshModel(QString path=QString(), QString name=QString());
         void updateBoundingBox();
-        virtual void decorateLayersWidgedItem(QTreeWidgetItem* parent);
+        void decorateLayersWidgedItem(QTreeWidgetItem* parent);
     /// @}
 
     /// @{ Qt foreach helpers
     ///    Example: foreach(Vertex v, m->validVertices()){ ... }
     public:
         using Surface_mesh::halfedges; /// Allows to use homonim method from Surface_mesh
-        using Surface_mesh::vertices;  /// Allows to use homonim method from Surface_mesh
         using Surface_mesh::faces;     /// Allows to use homonim method from Surface_mesh
         SurfaceMeshForEachHalfedgeHelper halfedges();
-        SurfaceMeshForEachVertexHelper vertices(); 
         SurfaceMeshForEachEdgeHelper edges();
         SurfaceMeshForEachFaceHelper faces();
         SurfaceMeshForEachOneRingEdgesHelper onering_hedges(Vertex v);
+        
+        /// @brief Allows to use homonim method from Surface_mesh
+        using Surface_mesh::vertices;
+        /// @brief Returns iterator visiting every (valid) mesh vertex
+        SurfaceMeshForEachVertexHelper vertices(); 
+        /// @brief Returns iterator visiting every mesh vertex on a given face
+        /// @note Transparently overrides Surface_mesh's method but supports Qt::foreach
+        SurfaceMeshForEachVertexOnFaceHelper vertices(Face f); 
     /// @}
 
     /// @{ Query existence of basic properties
@@ -115,9 +122,20 @@ class DYNAMIC_SURFACEMESH_EXPORT SurfaceMeshModel : public Starlab::Model, publi
 /// Allows you to refer to SurfaceMeshModel as "SurfaceMesh::Model"
 typedef SurfaceMeshModel Model;    
 
+/// @{ Casting & Type-checking
+    /// @brief is the given starlab model a SurfaceMeshModel?
+    bool is_a(StarlabModel* model);
+    /// @brief safely cast to SurfaceMesh throwing exception on fail
+    SurfaceMeshModel* safe_cast(Starlab::Model* model);
+    /// @obsolete use safe_cast
+    SurfaceMeshModel* safeCast(Starlab::Model* model);
+    /// @obsolete use is_a
+    bool isA(StarlabModel* model);    
+/// @}
+
 } // namespace
 
-/// Allow user to use Qt "foreach" constructs
+/// Allow the use of Qt "foreach" constructs
 #include "helpers/SurfaceMeshQForEachHelpers.h"
 
 /// Append namespace to name
