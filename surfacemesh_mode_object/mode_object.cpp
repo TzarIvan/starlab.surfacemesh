@@ -76,7 +76,8 @@ bool mode_object::keyReleaseEvent(QKeyEvent* ke){
     //if(ke->key().)
     //ke->key()
     
-    if( ke->key() == Qt::Key_Escape ){
+    /// @bug mode plugin is intercepting the escape command :(
+    if( ke->key() == Qt::Key_Escape){
         command.clear();
         draw();
         return true;
