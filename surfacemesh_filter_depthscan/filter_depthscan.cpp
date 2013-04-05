@@ -33,7 +33,7 @@ void filter_depthscan::applyFilter(RichParameterSet* /*pars*/){
             drawArea()->camera()->convertClickToLine( QPoint(winX, winY), _orig, _dir );
             Vector3 orig(_orig[0],_orig[1],_orig[2]);
             Vector3 dir(_dir[0],_dir[1],_dir[2]);
-            int isectHit = 1;
+            int isectHit = -1;
             Vec3d ipoint = octree.closestIntersectionPoint( Ray(orig, dir), &isectHit );
             
             /// ------------- THESE ARE RENDERED ---------------
