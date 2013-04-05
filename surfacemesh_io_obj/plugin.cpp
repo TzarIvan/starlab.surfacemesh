@@ -1,5 +1,5 @@
 #include "plugin.h"
-#include "SurfaceMeshNormalsHelper.h";
+#include "SurfaceMeshNormalsHelper.h"
 
 using namespace SurfaceMesh;
 

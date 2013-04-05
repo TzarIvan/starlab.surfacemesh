@@ -26,7 +26,7 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
         parameters()->addParam( new RichBool("double_side", true, "Enable double side illumination") );
         parameters()->addParam( new RichFloat("gl_point_size", 3, "GLPoint size") );
         parameters()->addParam( new RichBool("use_splats", false, "Use disk-splats") );
-        parameters()->addParam( new RichFloat("splat_size", .015, "Disk splats size") );
+        parameters()->addParam( new RichFloat("splat_size", 0.015f, "Disk splats size") );
     }
     
     void init(){
