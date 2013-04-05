@@ -9,9 +9,11 @@ Q_EXPORT_PLUGIN(filter_depthscan)
 
 using namespace SurfaceMesh;
 
-void filter_depthscan::initParameters(RichParameterSet*){}
+void filter_depthscan::initParameters(RichParameterSet* pars){
+    pars->addParam( new RichInt("density", 5, "A ray every K-pixels", "How many rays to shoot? (clamped [1,inf])") );
+}
 
-void filter_depthscan::applyFilter(RichParameterSet* /*pars*/){
+void filter_depthscan::applyFilter(RichParameterSet* pars){
     typedef qglviewer::Vec QGLVec;
     /// Window size
     int w = drawArea()->width();
@@ -24,11 +26,15 @@ void filter_depthscan::applyFilter(RichParameterSet* /*pars*/){
     /// Create a model to store scans & add it
     SurfaceMeshModel* mesh = new SurfaceMeshModel("","Scan");
     document()->addModel(mesh);   
-   
+    drawArea()->setRenderer(mesh,"Vertices as Dots");
+    mesh->color = Qt::red;
+
+    /// step>1
+    int step = qMax( pars->getInt("density"),1 );
     
     /// Perform scan
-    for(int winX=0; winX<w; winX+=100){
-        for(int winY=0; winY<h; winY+=100){
+    for(int winX=0; winX<w; winX+=step){
+        for(int winY=0; winY<h; winY+=step){
             QGLVec _orig, _dir;
             drawArea()->camera()->convertClickToLine( QPoint(winX, winY), _orig, _dir );
             Vector3 orig(_orig[0],_orig[1],_orig[2]);
@@ -37,7 +43,7 @@ void filter_depthscan::applyFilter(RichParameterSet* /*pars*/){
             Vec3d ipoint = octree.closestIntersectionPoint( Ray(orig, dir), &isectHit );
             
             /// ------------- THESE ARE RENDERED ---------------
-            drawArea()->drawRay(orig, dir, 1, Qt::red, 3);
+            // drawArea()->drawRay(orig, dir, 1, Qt::red, 3);
             /// ------------- THESE ARE RENDERED ---------------
             
             if(isectHit>=0)
