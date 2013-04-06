@@ -150,40 +150,22 @@ void surfacemesh_io_obj::save(SurfaceMeshModel* mesh,QString path) {
     Vector3VertexProperty p = mesh->vertex_coordinates();
     Vector3VertexProperty n = mesh->vertex_normals();
 
-    if(n){
-        foreach(Vertex v, mesh->vertices()){
-            fprintf( fid, "vn %.10f %.10f %.10f\n", n[v].x(), n[v].y(), n[v].z() );        
-            fprintf( fid, "v %.10f %.10f %.10f\n", p[v].x(), p[v].y(), p[v].z() );
-        }
-    } else {
-        foreach(Vertex v, mesh->vertices())
-            fprintf( fid, "v %.10f %.10f %.10f\n", p[v].x(), p[v].y(), p[v].z() );
+    foreach(Vertex v, mesh->vertices()){
+        if(n) fprintf( fid, "vn %.10f %.10f %.10f\n", n[v].x(), n[v].y(), n[v].z() );        
+        fprintf( fid, "v %.10f %.10f %.10f\n", p[v].x(), p[v].y(), p[v].z() );
     }
 
     foreach(Face f, mesh->faces()) {
         // int nV = mesh->valence(f);
         fprintf(fid, "f");
-        Surface_mesh::Vertex_around_face_circulator fvit=mesh->vertices(f), fvend=fvit;
-        do {
-            fprintf(fid, " %d", ((Surface_mesh::Vertex)fvit).idx()+1);
-        } while (++fvit != fvend);
-        fprintf(fid, "\n");
+        foreach(Vertex v, mesh->vertices(f)){
+            int ni = ((Surface_mesh::Vertex)v).idx()+1;
+            if(n) fprintf(fid, " %d//%d", ni, ni);
+            else  fprintf(fid, " %d", ni);
+        }
     }
 
     fclose(fid);
-
-/// @todo load/save with face normals
-#if 0 
-    if(has_vnormals) {
-        Vector3VertexProperty vnormals = helper.getVector3VertexProperty(VNORMAL);
-        foreach(Vertex v, mesh->vertices())
-        ; // fprintf( fid, "v %f %f %f\n", M.vertices(i,1), M.vertices(i,2), M.vertices(i,3) );
-        foreach(Vertex v, mesh->vertices())
-        ; // fprintf( fid, "vn %f %f %f\n", VN(i,1), VN(i,2), VN(i,3) );
-        foreach(Face   f, mesh->faces())
-        ; // fprintf( fid, "f %.0f//%.0f %.0f//%.0f %.0f//%.0f\n",
-    }
-#endif
 }
 
 Q_EXPORT_PLUGIN(surfacemesh_io_obj)
