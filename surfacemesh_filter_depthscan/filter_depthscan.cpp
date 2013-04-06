@@ -10,10 +10,28 @@ Q_EXPORT_PLUGIN(filter_depthscan)
 
 using namespace SurfaceMesh;
 
+/// @brief generate a sample of a specific gaussian distribution using the Box-Muller transform.
+///        See http://en.wikipedia.org/wiki/Box-Muller_transform
+/// @param mean the mean of the distribution
+/// @param stddev the standard deviation of the distribution
+/// @return a sample of this distribution
+/// @note Stole from (GPL) https://code.google.com/p/nll/source/browse/trunk/nll/math-distribution-gaussian.h
+inline double randn( const double mean, const double stddev ){
+   double u1 = ( static_cast<double> ( rand() ) + 1 ) / ( (double)RAND_MAX + 1 );
+   double u2 = ( static_cast<double> ( rand() ) + 1 ) / ( (double)RAND_MAX + 1 );
+   assert( -2 * log( u1 ) >= 0 );
+   double t1 = sqrt( -2 * log( u1 ) ) * cos( 2 * M_PI * u2 );
+   return mean + stddev * t1;
+}
+
 void filter_depthscan::initParameters(RichParameterSet* pars){
+    double noisedefault = 0.01;
+    if(model()) noisedefault = model()->bbox().size().length() * .01;
+
     pars->addParam( new RichInt("density", 5, "A ray every K-pixels", "How many rays to shoot? (clamped [1,inf])") );
     pars->addParam( new RichFloat("maxangle", 80, "Grazing TH < ", "Discard when above certain grazing angle (degrees)") );
     pars->addParam( new RichBool("getnormal", true, "Sample Normals", "Store normals by reading them from the mesh") );
+    pars->addParam( new RichFloat("znoise", noisedefault, "Z Sample Noise", "Perturb samples along Z direction with the given variance. Value initialized at 1% of bbox.") );
     // pars->addParam( new RichFloat("saveviewdir", 80, "Sample Viewpoint", "Store view directions") );
 }
 
@@ -48,6 +66,9 @@ void filter_depthscan::applyFilter(RichParameterSet* pars){
     double angle = qBound(0.0, (double) pars->getFloat("maxangle"), 90.0);
     double mincosangle = cos( angle * M_PI / 180 );
     
+    /// scan noise
+    double znoise = pars->getFloat("znoise");
+    
     /// Fetch normals?
     bool getNormals = pars->getBool("getnormal");
     Vector3VertexProperty vnormals = scan->vertex_normals(getNormals);
@@ -59,22 +80,18 @@ void filter_depthscan::applyFilter(RichParameterSet* pars){
             drawArea()->camera()->convertClickToLine( QPoint(winX, winY), _orig, _dir );
             Vector3 orig(_orig[0],_orig[1],_orig[2]);
             Vector3 dir(_dir[0],_dir[1],_dir[2]);
+            dir.normalize(); ///< just to be sure
             int isectHit = -1;
             Vec3d ipoint = octree.closestIntersectionPoint( Ray(orig, dir), &isectHit );
-            
-            /// ------------- THESE ARE RENDERED ---------------
-            // drawArea()->drawRay(orig, dir, 1, Qt::red, 3);
-            /// ------------- THESE ARE RENDERED ---------------
             
             if(isectHit>=0){
                 Vector3 fnormal = fnormals[ Face(isectHit) ];
                 double cosangle = dot( fnormal, -dir );
                 if(cosangle>mincosangle){
+                    ipoint[2] += randn(0.0,znoise);
                     Vertex v = scan->add_vertex( ipoint );     
-                    qDebug() << v.idx();
                     if(getNormals){
                         vnormals[v] = fnormal;
-                        qDebug() << vnormals[v];
                         // drawArea()->drawRay(ipoint, fnormal,1,Qt::red,.1);
                     }
                 }
