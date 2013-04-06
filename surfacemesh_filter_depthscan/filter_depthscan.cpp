@@ -5,12 +5,16 @@ Q_EXPORT_PLUGIN(filter_depthscan)
 #include <qgl.h>
 #include "SurfaceMeshModel.h"
 #include "StarlabDrawArea.h"
+#include "SurfaceMeshNormalsHelper.h"
 #include "Octree.h"
 
 using namespace SurfaceMesh;
 
 void filter_depthscan::initParameters(RichParameterSet* pars){
     pars->addParam( new RichInt("density", 5, "A ray every K-pixels", "How many rays to shoot? (clamped [1,inf])") );
+    pars->addParam( new RichFloat("maxangle", 80, "Grazing TH < ", "Discard when above certain grazing angle (degrees)") );
+    pars->addParam( new RichBool("getnormal", true, "Sample Normals", "Store normals by reading them from the mesh") );
+    // pars->addParam( new RichFloat("saveviewdir", 80, "Sample Viewpoint", "Store view directions") );
 }
 
 void filter_depthscan::applyFilter(RichParameterSet* pars){
@@ -23,14 +27,30 @@ void filter_depthscan::applyFilter(RichParameterSet* pars){
     SurfaceMeshModel* selection = SurfaceMesh::safe_cast( model() );
     Octree octree( selection );
 
+    if(selection->n_faces()==0)
+        throw StarlabException("Cannot scan a point cloud, need n_faces()>0");
+    
+    /// Need face normals for angle rejection
+    if(!selection->has_face_normals())
+        SurfaceMesh::NormalsHelper(selection).compute_face_normals();
+    Vector3FaceProperty fnormals = selection->face_normals();
+    
     /// Create a model to store scans & add it
-    SurfaceMeshModel* mesh = new SurfaceMeshModel("","Scan");
-    document()->addModel(mesh);   
-    drawArea()->setRenderer(mesh,"Vertices as Dots");
-    mesh->color = Qt::red;
+    SurfaceMeshModel* scan = new SurfaceMeshModel("","Scan");
+    document()->addModel(scan);   
+    drawArea()->setRenderer(scan,"Vertices as Dots");
+    scan->color = Qt::red;
 
-    /// step>1
+    /// assert( step>1 )
     int step = qMax( pars->getInt("density"),1 );
+    
+    /// angle: [0,90]
+    double angle = qBound(0.0, (double) pars->getFloat("maxangle"), 90.0);
+    double mincosangle = cos( angle * M_PI / 180 );
+    
+    /// Fetch normals?
+    bool getNormals = pars->getBool("getnormal");
+    Vector3VertexProperty vnormals = scan->vertex_normals(getNormals);
     
     /// Perform scan
     for(int winX=0; winX<w; winX+=step){
@@ -46,13 +66,24 @@ void filter_depthscan::applyFilter(RichParameterSet* pars){
             // drawArea()->drawRay(orig, dir, 1, Qt::red, 3);
             /// ------------- THESE ARE RENDERED ---------------
             
-            if(isectHit>=0)
-                mesh->add_vertex( ipoint );
+            if(isectHit>=0){
+                Vector3 fnormal = fnormals[ Face(isectHit) ];
+                double cosangle = dot( fnormal, -dir );
+                if(cosangle>mincosangle){
+                    Vertex v = scan->add_vertex( ipoint );     
+                    qDebug() << v.idx();
+                    if(getNormals){
+                        vnormals[v] = fnormal;
+                        qDebug() << vnormals[v];
+                        // drawArea()->drawRay(ipoint, fnormal,1,Qt::red,.1);
+                    }
+                }
+            }
         }
     }
     
     /// Inform user
-    showMessage("Scanned #P=%d points", mesh->n_vertices());
+    showMessage("Scanned #P=%d points", scan->n_vertices());
 }
 
 
