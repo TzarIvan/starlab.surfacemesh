@@ -108,6 +108,7 @@ class DYNAMIC_SURFACEMESH_EXPORT SurfaceMeshModel : public StarlabModel, public 
     /// @{ Access to default properties
         Vector3VertexProperty vertex_coordinates(bool create_if_missing=false);
         Vector3VertexProperty vertex_normals(bool create_if_missing=false);
+        Vector3FaceProperty   face_normals(bool create_if_missing=false);
     /// @}
         
     /// @{ forced garbage collection!!

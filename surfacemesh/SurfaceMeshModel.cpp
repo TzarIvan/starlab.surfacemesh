@@ -94,9 +94,16 @@ Vector3VertexProperty SurfaceMeshModel::vertex_coordinates(bool create_if_missin
 
 Vector3VertexProperty SurfaceMeshModel::vertex_normals(bool create_if_missing){
     if(create_if_missing)
-        return vertex_property<Vector3>(VNORMAL,Vector3(0.0,0.0,0.0));
+        return vertex_property<Vector3>(VNORMAL,Vector3(0.0,0.0,1.0));
     else
         return get_vertex_property<Vector3>(VNORMAL);
+}
+
+Vector3FaceProperty SurfaceMeshModel::face_normals(bool create_if_missing){
+    if(create_if_missing)
+        return face_property<Vector3>(FNORMAL,Vector3(0.0,0.0,1.0));
+    else
+        return get_face_property<Vector3>(FNORMAL);
 }
 
 QDebug operator<< (QDebug d, const Surface_mesh::Edge& edge) {
