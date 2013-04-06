@@ -163,6 +163,7 @@ void surfacemesh_io_obj::save(SurfaceMeshModel* mesh,QString path) {
             if(n) fprintf(fid, " %d//%d", ni, ni);
             else  fprintf(fid, " %d", ni);
         }
+        fprintf(fid,"\n");
     }
 
     fclose(fid);
