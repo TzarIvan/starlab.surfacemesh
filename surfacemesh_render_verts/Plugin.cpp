@@ -40,13 +40,10 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
     }
     
     void render(){
+        Surface_mesh::Vertex_property<Color> vcolor = mesh()->get_vertex_property<Color>("v:color");
+        bool has_vertex_color = mesh()->has_vertex_property<Color>("v:color");
+
         GLUquadricObj *q = gluNewQuadric();
-//		gluQuadricNormals (q,GLU_TRUE);
-//		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, surfelcolor);
-//		if( drawbackpoint == 0 )
-//			glMaterialfv(GL_BACK, GL_AMBIENT_AND_DIFFUSE, diskback);
-//		else if( drawbackpoint == 1 )
-//			glMaterialfv(GL_BACK, GL_AMBIENT_AND_DIFFUSE, surfelcolor);
         
         /// Constants
         Eigen::Vector3d zaxis(0.0,0.0,1.0);
@@ -86,6 +83,8 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
                     foreach(Vertex v, mesh()->vertices()){
                         glNormal3dv(normals[v].data());
                         glVertex3dv(points[v].data());
+                        if(has_vertex_color)
+                            glColor3dv(vcolor[v].data());
                     } 
                 glEnd();
             }
