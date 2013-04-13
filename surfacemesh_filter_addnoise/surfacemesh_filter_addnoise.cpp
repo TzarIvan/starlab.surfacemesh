@@ -55,11 +55,11 @@ void surfacemesh_filter_addnoise::applyFilter(RichParameterSet* pars){
 
     /// Generate random points within bbox
     if( pars->getString("mode") == "Environment Noise" ){
-        int n=100;
+        int n = mesh()->n_vertices()*pars->getFloat("noisepct");
         for(int i=0; i<n; i++){
-            double x = drand48()*mesh()->bbox().size().x() + mesh()->bbox().minimum().x();
-            double y = drand48()*mesh()->bbox().size().y() + mesh()->bbox().minimum().y();
-            double z = drand48()*mesh()->bbox().size().z() + mesh()->bbox().minimum().z();
+            double x = (drand48()-.5) * noise + mesh()->bbox().center().x();
+            double y = (drand48()-.5) * noise + mesh()->bbox().center().y();
+            double z = (drand48()-.5) * noise + mesh()->bbox().center().z();
             mesh()->add_vertex( Point(x,y,z) );
         }
     }

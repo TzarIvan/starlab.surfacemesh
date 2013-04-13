@@ -55,8 +55,11 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
         if(!lights_on || !normals){
             glDisable(GL_LIGHTING);
                 glBegin(GL_POINTS);
-                    foreach(Vertex v, mesh()->vertices())
+                    foreach(Vertex v, mesh()->vertices()) {
+                        if(has_vertex_color)
+                            glColor3dv(vcolor[v].data());
                         glVertex3dv(points[v].data());
+                    }
                 glEnd();
             glEnable(GL_LIGHTING);
         } 
@@ -81,10 +84,10 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
             } else {
                 glBegin(GL_POINTS);
                     foreach(Vertex v, mesh()->vertices()){
-                        glNormal3dv(normals[v].data());
-                        glVertex3dv(points[v].data());
                         if(has_vertex_color)
                             glColor3dv(vcolor[v].data());
+                        glNormal3dv(normals[v].data());
+                        glVertex3dv(points[v].data());
                     } 
                 glEnd();
             }
