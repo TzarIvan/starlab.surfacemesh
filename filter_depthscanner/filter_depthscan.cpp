@@ -6,9 +6,12 @@ Q_EXPORT_PLUGIN(filter_depthscan)
 #include "SurfaceMeshModel.h"
 #include "StarlabDrawArea.h"
 #include "SurfaceMeshNormalsHelper.h"
+#include "SurfaceMesh/DepthTriangulator.h"
 #include "Octree.h"
+#include "Eigen/Dense"
 
 using namespace SurfaceMesh;
+using namespace Eigen;
 
 /// @brief generate a sample of a specific gaussian distribution using the Box-Muller transform.
 ///        See http://en.wikipedia.org/wiki/Box-Muller_transform
@@ -24,15 +27,19 @@ inline double randn( const double mean, const double stddev ){
    return mean + stddev * t1;
 }
 
+inline bool isnan(double a){ return (a!=a); }
+
 void filter_depthscan::initParameters(RichParameterSet* pars){
-    double noisedefault = 0.01;
-    if(model()) noisedefault = model()->bbox().size().length() * .01;
+    double noisedefault = 0.0025;
+    if(model()) noisedefault = model()->bbox().size().length() * .0025;
 
     pars->addParam( new RichInt("density", 5, "A ray every K-pixels", "How many rays to shoot? (clamped [1,inf])") );
     pars->addParam( new RichFloat("maxangle", 80, "Grazing TH < ", "Discard when above certain grazing angle (degrees)") );
-    pars->addParam( new RichBool("getnormal", true, "Sample Normals", "Store normals by reading them from the mesh") );
+    // pars->addParam( new RichBool("getnormal", true, "Sample Normals", "Store normals by reading them from the mesh") );
     pars->addParam( new RichFloat("znoise", noisedefault, "Z Sample Noise", "Perturb samples along Z direction with the given variance. Value initialized at 1% of bbox.") );
     // pars->addParam( new RichFloat("saveviewdir", 80, "Sample Viewpoint", "Store view directions") );
+    // pars->addParam( new RichBool("triangulate", 80, "Triangulate samples", "Generates a mesh instead of a point cloud") );
+    // pars->addParam( new RichFloat("", 80, "Triangulate samples", "Generates a mesh instead of a point cloud") );
 }
 
 void filter_depthscan::applyFilter(RichParameterSet* pars){
@@ -56,8 +63,8 @@ void filter_depthscan::applyFilter(RichParameterSet* pars){
     /// Create a model to store scans & add it
     SurfaceMeshModel* scan = new SurfaceMeshModel("","Scan");
     document()->addModel(scan);   
-    drawArea()->setRenderer(scan,"Vertices as Dots");
-    scan->color = Qt::red;
+    drawArea()->setRenderer(scan,"Flat Shading");
+    scan->color = QColor(125,0,0);
 
     /// assert( step>1 )
     int step = qMax( pars->getInt("density"),1 );
@@ -70,12 +77,25 @@ void filter_depthscan::applyFilter(RichParameterSet* pars){
     double znoise = pars->getFloat("znoise");
     
     /// Fetch normals?
-    bool getNormals = pars->getBool("getnormal");
-    Vector3VertexProperty vnormals = scan->vertex_normals(getNormals);
+    // bool getNormals = pars->getBool("getnormal");
     
+
+    /// Size of matrices
+    int nrows = std::floor( h / step );
+    int ncols = std::floor( w / step );
+    
+    /// Layers containing point coordinates
+    Matrix<Scalar, Dynamic, Dynamic> X(ncols,nrows); X.setConstant( std::numeric_limits<Scalar>::quiet_NaN() );
+    Matrix<Scalar, Dynamic, Dynamic> Y(ncols,nrows); Y.setConstant( std::numeric_limits<Scalar>::quiet_NaN() );
+    Matrix<Scalar, Dynamic, Dynamic> Z(ncols,nrows); Z.setConstant( std::numeric_limits<Scalar>::quiet_NaN() );
+    /// And normals
+    // Matrix<Scalar, Dynamic, Dynamic> NX(ncols,nrows); NX.setConstant( std::numeric_limits<Scalar>::quiet_NaN() );
+    // Matrix<Scalar, Dynamic, Dynamic> NY(ncols,nrows); NY.setConstant( std::numeric_limits<Scalar>::quiet_NaN() );
+    // Matrix<Scalar, Dynamic, Dynamic> NZ(ncols,nrows); NZ.setConstant( std::numeric_limits<Scalar>::quiet_NaN() );
+
     /// Perform scan
-    for(int winX=0; winX<w; winX+=step){
-        for(int winY=0; winY<h; winY+=step){
+    for(int winX=0,i=0; i<ncols; winX+=step, i++){
+        for(int winY=0,j=0; j<nrows; winY+=step, j++){
             QGLVec _orig, _dir;
             drawArea()->camera()->convertClickToLine( QPoint(winX, winY), _orig, _dir );
             Vector3 orig(_orig[0],_orig[1],_orig[2]);
@@ -89,15 +109,22 @@ void filter_depthscan::applyFilter(RichParameterSet* pars){
                 double cosangle = dot( fnormal, -dir );
                 if(cosangle>mincosangle){
                     ipoint[2] += randn(0.0,znoise);
-                    Vertex v = scan->add_vertex( ipoint );     
-                    if(getNormals){
-                        vnormals[v] = fnormal;
-                        // drawArea()->drawRay(ipoint, fnormal,1,Qt::red,.1);
-                    }
+                    
+                    /// Save point
+                    X(i,j) = ipoint[0];
+                    Y(i,j) = ipoint[1];
+                    Z(i,j) = ipoint[2];
+                    /// Save normal
+                    // NX(i,j) = fnormal[0];
+                    // NY(i,j) = fnormal[1];
+                    // NZ(i,j) = fnormal[2];
                 }
             }
         }
     }
+
+    DepthTriangulator(scan).execute(X,Y,Z);
+    scan->update_vertex_normals();
     
     /// Inform user
     showMessage("Scanned #P=%d points", scan->n_vertices());

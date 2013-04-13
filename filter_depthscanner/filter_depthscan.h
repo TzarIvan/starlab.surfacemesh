@@ -5,7 +5,7 @@ class filter_depthscan : public FilterPlugin{
     Q_INTERFACES(FilterPlugin)
 
 public:
-    QString name() { return "Depth Scan"; }
+    QString name() { return "Virtual Depth Scan"; }
     QString description() { return "Take a depth screenshot"; }
     bool isApplicable(StarlabModel*){ return true; }
     void applyFilter(RichParameterSet*);
