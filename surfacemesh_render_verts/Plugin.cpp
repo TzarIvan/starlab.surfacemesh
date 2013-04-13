@@ -1,7 +1,10 @@
-#include <QtOpenGL>
 #include "Plugin.h"
+Q_EXPORT_PLUGIN(Plugin)
+
+#include <QtOpenGL>
 #include "SurfaceMeshPlugins.h"
 #include "Eigen/Dense"
+#include "StarlabDrawArea.h"
 
 using namespace SurfaceMesh;
 
@@ -43,6 +46,9 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
         Surface_mesh::Vertex_property<Color> vcolor = mesh()->get_vertex_property<Color>("v:color");
         bool has_vertex_color = mesh()->has_vertex_property<Color>("v:color");
 
+        qglviewer::Vec cp = plugin()->drawArea()->camera()->position();
+        Vector3 camera_position( cp.x, cp.y, cp.z );
+
         GLUquadricObj *q = gluNewQuadric();
         
         /// Constants
@@ -83,10 +89,14 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
                 }
             } else {
                 glBegin(GL_POINTS);
+                    Vector3 normal;
                     foreach(Vertex v, mesh()->vertices()){
                         if(has_vertex_color)
                             glColor3dv(vcolor[v].data());
-                        glNormal3dv(normals[v].data());
+                        normal = normals[v];
+                        if(double_side && dot(points[v]-camera_position,normals[v])>0)
+                            normal = -normal;
+                        glNormal3dv(normal);
                         glVertex3dv(points[v].data());
                     } 
                 glEnd();
@@ -97,4 +107,3 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
 
 Renderer* Plugin::instance(){ return new PointCloudRenderer(); }
 
-Q_EXPORT_PLUGIN(Plugin)
