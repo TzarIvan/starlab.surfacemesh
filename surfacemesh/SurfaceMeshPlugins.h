@@ -35,7 +35,7 @@ class SurfaceMeshFilterPlugin : public FilterPlugin{
 public:
     SurfaceMesh::Model* mesh(){ return safeCast(model()); }    
 private:
-    bool isApplicable(Starlab::Model* model) { return isA(model); }
+    bool isApplicable(Starlab::Model* model) { return (model!=NULL) && isA(model); }
 };
 
 class SurfaceMeshModePlugin : public ModePlugin{
