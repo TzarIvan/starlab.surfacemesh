@@ -19,7 +19,9 @@ HEADERS += SurfaceMeshModel.h \
     helpers/DoUndoHelper.h \
     helpers/LocalAnalysisHelper.h \
     helpers/StatisticsHelper.h \
-    helpers/SurfaceMeshNormalsHelper.h
+    helpers/SurfaceMeshNormalsHelper.h \
+    iterators/StdIterators.h \ 
+    SurfaceMesh/NoiseGenerator.h
  
 SOURCES += SurfaceMeshModel.cpp
 
