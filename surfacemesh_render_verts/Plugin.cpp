@@ -43,16 +43,13 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
     }
     
     void render(){
+        Surface_mesh::Vertex_property<Color> vcolor = mesh()->get_vertex_property<Color>("v:color");
+        bool has_vertex_color = mesh()->has_vertex_property<Color>("v:color");
+
         qglviewer::Vec cp = plugin()->drawArea()->camera()->position();
         Vector3 camera_position( cp.x, cp.y, cp.z );
-        
+
         GLUquadricObj *q = gluNewQuadric();
-//		gluQuadricNormals (q,GLU_TRUE);
-//		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, surfelcolor);
-//		if( drawbackpoint == 0 )
-//			glMaterialfv(GL_BACK, GL_AMBIENT_AND_DIFFUSE, diskback);
-//		else if( drawbackpoint == 1 )
-//			glMaterialfv(GL_BACK, GL_AMBIENT_AND_DIFFUSE, surfelcolor);
         
         /// Constants
         Eigen::Vector3d zaxis(0.0,0.0,1.0);
@@ -64,8 +61,11 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
         if(!lights_on || !normals){
             glDisable(GL_LIGHTING);
                 glBegin(GL_POINTS);
-                    foreach(Vertex v, mesh()->vertices())
+                    foreach(Vertex v, mesh()->vertices()) {
+                        if(has_vertex_color)
+                            glColor3dv(vcolor[v].data());
                         glVertex3dv(points[v].data());
+                    }
                 glEnd();
             glEnable(GL_LIGHTING);
         } 
@@ -91,6 +91,8 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
                 glBegin(GL_POINTS);
                     Vector3 normal;
                     foreach(Vertex v, mesh()->vertices()){
+                        if(has_vertex_color)
+                            glColor3dv(vcolor[v].data());
                         normal = normals[v];
                         if(double_side && dot(points[v]-camera_position,normals[v])>0)
                             normal = -normal;
