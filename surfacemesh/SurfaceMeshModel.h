@@ -76,6 +76,7 @@ namespace SurfaceMesh{
     class SurfaceMeshForEachOneRingEdgesHelper;
     class SurfaceMeshForEachFaceHelper;
     class SurfaceMeshForEachHalfedgeHelper;
+    class SurfaceMeshForEachFaceAtVertex;
 /// @}     
     
 /**
@@ -96,15 +97,21 @@ public:
 /// @{ Qt foreach helpers
 ///    Example: foreach(Vertex v, m->validVertices()){ ... }
 public:
-    using Surface_mesh::halfedges; /// Allows to use homonim method from Surface_mesh
-    using Surface_mesh::faces;     /// Allows to use homonim method from Surface_mesh
-    SurfaceMeshForEachHalfedgeHelper halfedges();
-    SurfaceMeshForEachEdgeHelper edges();
-    SurfaceMeshForEachFaceHelper faces();
-    SurfaceMeshForEachOneRingEdgesHelper onering_hedges(Vertex v);
+    using Surface_mesh::halfedges; ///< Allows to use methods from Surface_mesh
+    using Surface_mesh::faces;     ///< Allows to use methods from Surface_mesh
+    using Surface_mesh::vertices;  ///< Allows to use methods from Surface_mesh
     
-    /// @brief Allows to use homonim method from Surface_mesh
-    using Surface_mesh::vertices;
+    /// @brief Returns iterator visiting every (valid) halfedge on a mesh
+    SurfaceMeshForEachHalfedgeHelper halfedges();
+    /// @brief Returns iterator visiting every (valid) edge on a mesh
+    SurfaceMeshForEachEdgeHelper edges();
+    /// @todo use the override scheme and just call it hedges(v)
+    SurfaceMeshForEachOneRingEdgesHelper onering_hedges(Vertex v);
+    /// @brief Returns iterator visiting every (valid) face on a mesh
+    SurfaceMeshForEachFaceHelper faces();   
+    /// @brief Returns iterator visiting every face incident to a vertex
+    /// @note Transparently overrides Surface_mesh's method but supports Qt::foreach
+    SurfaceMeshForEachFaceAtVertex faces(Vertex v); 
     /// @brief Returns iterator visiting every (valid) mesh vertex
     SurfaceMeshForEachVertexHelper vertices(); 
     /// @brief Returns iterator visiting every mesh vertex on a given face
@@ -128,6 +135,7 @@ public:
 /// @}
 
 /// @{ Extra exposed functionality
+    /// @brief Removes vertex
     void remove_vertex(Vertex v);
 /// @}
 };
@@ -150,6 +158,7 @@ typedef SurfaceMeshModel Model;
 
 /// Allow the use of Qt "foreach" constructs
 #include "helpers/SurfaceMeshQForEachHelpers.h"
+#include "iterators/StdIterators.h"
 
 /// Append namespace to name
 //typedef SurfaceMesh::Model SurfaceMeshModel; // this causes ambiguous case for compiler

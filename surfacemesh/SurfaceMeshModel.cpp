@@ -5,11 +5,11 @@ using namespace SurfaceMesh;
 
 namespace SurfaceMesh{
     bool isA(StarlabModel* model){
-        SurfaceMeshModel* mesh = qobject_cast<SurfaceMeshModel*>(model);
+        SurfaceMeshModel* mesh = dynamic_cast<SurfaceMeshModel*>(model);
         return (mesh!=NULL);
     }
     SurfaceMeshModel* safe_cast(StarlabModel* model){
-        SurfaceMeshModel* mesh = qobject_cast<SurfaceMeshModel*>(model);
+        SurfaceMeshModel* mesh = dynamic_cast<SurfaceMeshModel*>(model);
         if(!mesh) 
             throw StarlabException("Model is not a SurfaceMeshModel");
         return mesh;
@@ -57,6 +57,12 @@ void SurfaceMeshModel::updateBoundingBox(){
 }
 
 void SurfaceMeshModel::remove_vertex(Vertex v){
+#if 0
+    /// More needs to be done.. halfedges need to be cleaned up
+    if( !is_valid(v) ) return;        
+    foreach(Face f, this->faces(v))
+        this->fdeleted_[f] = true;
+#endif
     this->vdeleted_[v] = true;
     this->garbage_ = true;
 }
@@ -79,6 +85,10 @@ SurfaceMeshForEachEdgeHelper SurfaceMeshModel::edges(){
 
 SurfaceMeshForEachFaceHelper SurfaceMeshModel::faces(){
     return SurfaceMeshForEachFaceHelper(this);
+}
+
+SurfaceMeshForEachFaceAtVertex SurfaceMeshModel::faces(Surface_mesh::Vertex v){
+    return SurfaceMeshForEachFaceAtVertex(this,v);
 }
 
 SurfaceMeshForEachOneRingEdgesHelper SurfaceMeshModel::onering_hedges(Surface_mesh::Vertex v){

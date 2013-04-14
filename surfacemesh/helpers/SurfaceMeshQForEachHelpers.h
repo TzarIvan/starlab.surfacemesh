@@ -56,6 +56,50 @@ public:
     const_iterator end() const{return const_iterator(m,END);}   
 };
 
+/// Performance loss: measure
+class SurfaceMeshForEachFaceAtVertex : public Surface_mesh::Face_around_vertex_circulator{
+private:
+    typedef Surface_mesh::Face_around_vertex_circulator Super;
+    typedef SurfaceMeshModel::Vertex Vertex;
+    typedef SurfaceMeshModel::Face Face;
+public:
+    /// @internal used by Qt::foreach
+    typedef SurfaceMeshForEachFaceAtVertex const_iterator;
+private:
+    SurfaceMeshModel* _m;
+    Vertex _v;
+    bool disbelieve;
+public:
+    /// This let the traditional Vertex_around_face_circulator pass through
+    SurfaceMeshForEachFaceAtVertex(SurfaceMeshModel* m, Vertex v) 
+        : Face_around_vertex_circulator(m, v), _m(m), _v(v),disbelieve(false){}
+public:
+    /// In first iteration begin=end as we are in a loop, this operator prevents this from happening
+    bool operator!=(const SurfaceMeshForEachFaceAtVertex& rhs) const{
+        bool diffs = Super::operator !=(rhs);
+        if(!diffs && disbelieve) return true;
+        return diffs;
+    }
+    /// after first increment I am not at the origin anymore
+    Face_around_vertex_circulator& operator++(){
+        disbelieve=false; 
+        return Super::operator ++();
+    }
+    /// add dereferencing to "Vertex_around_face_circulator"
+    const Face operator*(){ 
+        return this->operator Face(); 
+    }
+public:
+    /// @internal used by Qt::foreach
+    const_iterator begin() const{return const_iterator(_m,_v,true);}
+    /// @internal used by Qt::foreach
+    const_iterator end() const{return const_iterator(_m,_v,false);}
+private:
+    /// @internal used by Qt::foreach
+    SurfaceMeshForEachFaceAtVertex(SurfaceMeshModel* m, Vertex v, bool disbelieve)
+        : Face_around_vertex_circulator(m, v),_m(m),_v(v),disbelieve(disbelieve){}   
+};
+
 /// Performance loss: FOREACH 47ms, TRADITIONAL 39ms
 class SurfaceMeshForEachVertexOnFaceHelper : public Surface_mesh::Vertex_around_face_circulator{
 private:
