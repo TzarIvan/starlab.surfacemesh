@@ -22,6 +22,7 @@ Vector3d char_to_vector3(char axisflag){
         case 'x': axis = Vector3d::UnitX(); break;
         case 'y': axis = Vector3d::UnitY(); break;
         case 'z': axis = Vector3d::UnitZ(); break;
+        case 'a': axis = Vector3d::Ones(); break;
         default: axis = Vector3d::UnitX(); break;
     }
     return axis;
@@ -50,8 +51,6 @@ void mode_object::execute(QString command){
         Vector3d axis = char_to_vector3(axisflag);
         angle = angle * M_PI / 180;
         AngleAxisd rot( angle, axis );
-        
-        /// Apply transformation
         MESH = rot.toRotationMatrix()*MESH;
     }
     
@@ -63,11 +62,20 @@ void mode_object::execute(QString command){
         int nread = sscanf(command.toStdString().c_str(), "t %c %lf", &axisflag, &offset);
         if(nread != 2){ showMessage("Incorrect transformation :("); return; }
         Vector3d axis = offset*char_to_vector3(axisflag);
-        /// M(:,i) + vector, foreach i 
         MESH.colwise() += axis;
-    }   
-    
+    }
 
+    /// s x .1
+    if( command.startsWith("s") ){
+        /// Parse
+        char axisflag='a';
+        double offset=0;
+        int nread = sscanf(command.toStdString().c_str(), "s %c %lf", &axisflag, &offset);
+        if(nread != 2){ showMessage("Incorrect transformation :("); return; }
+        Vector3d axis = offset*char_to_vector3(axisflag);
+        MESH = axis.asDiagonal()*MESH;
+    }
+    
     showMessage("Transformation applied!");    
 }
 
@@ -100,9 +108,11 @@ bool mode_object::keyReleaseEvent(QKeyEvent* ke){
     /// Auto-add whitespace
     if( ke->key() == Qt::Key_R || 
         ke->key() == Qt::Key_T || 
+        ke->key() == Qt::Key_S ||
         ke->key() == Qt::Key_X || 
         ke->key() == Qt::Key_Y || 
-        ke->key() == Qt::Key_Z )
+        ke->key() == Qt::Key_Z ||
+        ke->key() == Qt::Key_A)
         command.append(" ");
     
     /// Update message

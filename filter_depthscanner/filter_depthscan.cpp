@@ -85,13 +85,7 @@ void filter_depthscan::applyFilter(RichParameterSet* pars){
     int ncols = std::floor( w / step );
     
     /// Layers containing point coordinates
-    Matrix<Scalar, Dynamic, Dynamic> X(ncols,nrows); X.setConstant( std::numeric_limits<Scalar>::quiet_NaN() );
-    Matrix<Scalar, Dynamic, Dynamic> Y(ncols,nrows); Y.setConstant( std::numeric_limits<Scalar>::quiet_NaN() );
-    Matrix<Scalar, Dynamic, Dynamic> Z(ncols,nrows); Z.setConstant( std::numeric_limits<Scalar>::quiet_NaN() );
-    /// And normals
-    // Matrix<Scalar, Dynamic, Dynamic> NX(ncols,nrows); NX.setConstant( std::numeric_limits<Scalar>::quiet_NaN() );
-    // Matrix<Scalar, Dynamic, Dynamic> NY(ncols,nrows); NY.setConstant( std::numeric_limits<Scalar>::quiet_NaN() );
-    // Matrix<Scalar, Dynamic, Dynamic> NZ(ncols,nrows); NZ.setConstant( std::numeric_limits<Scalar>::quiet_NaN() );
+    Matrix<XYZ_View, Dynamic, Dynamic> X(ncols,nrows);
 
     /// Perform scan
     for(int winX=0,i=0; i<ncols; winX+=step, i++){
@@ -104,26 +98,22 @@ void filter_depthscan::applyFilter(RichParameterSet* pars){
             int isectHit = -1;
             Vec3d ipoint = octree.closestIntersectionPoint( Ray(orig, dir), &isectHit );
             
+            X(i,j).xyz[0] = std::numeric_limits<Scalar>::quiet_NaN();
             if(isectHit>=0){
                 Vector3 fnormal = fnormals[ Face(isectHit) ];
-                double cosangle = dot( fnormal, -dir );
+                double cosangle = std::abs(dot( fnormal, dir ));
                 if(cosangle>mincosangle){
-                    ipoint[2] += randn(0.0,znoise);
+                    ipoint += dir*randn(0.0,znoise);
                     
                     /// Save point
-                    X(i,j) = ipoint[0];
-                    Y(i,j) = ipoint[1];
-                    Z(i,j) = ipoint[2];
-                    /// Save normal
-                    // NX(i,j) = fnormal[0];
-                    // NY(i,j) = fnormal[1];
-                    // NZ(i,j) = fnormal[2];
+                    X(i,j).xyz = ipoint;
+                    X(i,j).view = dir;
                 }
             }
         }
     }
 
-    DepthTriangulator(scan).execute(X,Y,Z);
+    DepthTriangulator(scan).execute(X, mincosangle);
     scan->update_vertex_normals();
     
     /// Inform user
