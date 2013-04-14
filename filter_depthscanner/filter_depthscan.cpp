@@ -81,8 +81,8 @@ void filter_depthscan::applyFilter(RichParameterSet* pars){
     
 
     /// Size of matrices
-    int nrows = std::floor( h / step );
-    int ncols = std::floor( w / step );
+    int nrows = std::floor( double(h) / step );
+    int ncols = std::floor( double(w) / step );
     
     /// Layers containing point coordinates
     Matrix<XYZ_View, Dynamic, Dynamic> X(ncols,nrows);
