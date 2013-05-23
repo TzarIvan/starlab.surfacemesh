@@ -1,4 +1,4 @@
-load($$[STARLAB])
+include($$[STARLAB])
 StarlabTemplate(sharedlib)
  
 # Expose this to the global build
