@@ -21,10 +21,9 @@
 #define SURFACE_MESH_H
 
 //== INCLUDES =================================================================
-#include "../geometry/Vector.h"
 #include "properties.h"
 #include "../dynamic_surfacemesh_global.h" // to use in a dynamic library
-
+#include "Eigen/Dense"
 //== CLASS DEFINITION =========================================================
 
 /// \addtogroup surface_mesh surface_mesh
@@ -36,7 +35,7 @@ class DYNAMIC_SURFACEMESH_EXPORT Surface_mesh {
 /// Bandaid on types
 public:
     typedef double             Scalar;              ///< Scalar type
-    typedef Vector<Scalar,3>   Vector3;             ///< 3D vector type
+    typedef Eigen::Vector3d   Vector3;             ///< 3D vector type
     typedef Vector3            Color;               ///< Color type
     typedef Vector3            Point;               ///< Point type  (used by original Surface_mesh)
     typedef Vector3            Normal;              ///< Normal type (used by original Surface_mesh)

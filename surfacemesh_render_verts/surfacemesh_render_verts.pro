@@ -1,6 +1,5 @@
-load($$[STARLAB])
-load($$[SURFACEMESH])
-load($$[EIGEN])
+include($$[STARLAB])
+include($$[SURFACEMESH])
 StarlabTemplate(plugin)
 
 # linux does not have GLU included in += opengl

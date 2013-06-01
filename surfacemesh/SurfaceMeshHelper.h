@@ -65,7 +65,7 @@ public:
 			pnts.clear(); vit = vend = mesh->vertices(fit);
 			do{ pnts.push_back(points[vit]); } while(++vit != vend);
 
-			farea[fit] = 0.5 * cross((pnts[1] - pnts[0]),(pnts[2] - pnts[0])).norm();
+            farea[fit] = 0.5 * (pnts[1] - pnts[0]).cross(pnts[2] - pnts[0]).norm();
 		}
 
 		return farea;
@@ -102,7 +102,7 @@ public:
             v2 = ++vfit;
             
             // compute area
-            a = 0.5 * cross(points[v1]-points[v0], points[v2]-points[v0]).norm();
+            a = 0.5 * (points[v1]-points[v0]).cross(points[v2]-points[v0]).norm();
             
             // distribute area to vertices
             varea[v0] += a/3.0;

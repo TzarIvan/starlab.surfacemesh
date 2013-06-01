@@ -24,6 +24,8 @@ ARAPDeformer::~ARAPDeformer()
     mesh->remove_vertex_property(wij_weight);
 }
 
+Vector3 cross(const Vector3& a, const Vector3&b){ return a.cross(b); }
+
 void ARAPDeformer::ComputeCotWeights()
 {
 	Point p, p1, p2, p3;
@@ -205,6 +207,6 @@ void ARAPDeformer::Deform( int ARAPIteration /*= 1*/ )
 	for (vit = mesh->vertices_begin(); vit != vend; ++vit)
     {
 		int i = Surface_mesh::Vertex(vit).idx();
-        points[vit] = Vec3d (xyz[0][i], xyz[1][i], xyz[2][i]);
+        points[vit] = Eigen::Vector3d (xyz[0][i], xyz[1][i], xyz[2][i]);
 	}
 }

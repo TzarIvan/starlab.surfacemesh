@@ -148,10 +148,10 @@ void surfacemesh_mode_arapdeform::decorate()
         glColor3d(0,1,0);
 
         glBegin(GL_POLYGON);
-        glNormal3dv(fnormals[f]);
+        glNormal3dv(fnormals[f].data());
         Surface_mesh::Vertex_around_face_circulator vit, vend;
         vit = vend = mesh()->vertices(f);
-        do{ glVertex3dv(points[vit]); } while(++vit != vend);
+        do{ glVertex3dv(points[vit].data()); } while(++vit != vend);
         glEnd();
     }
 
@@ -160,10 +160,10 @@ void surfacemesh_mode_arapdeform::decorate()
         glColor3d(1,0,0);
 
         glBegin(GL_POLYGON);
-        glNormal3dv(fnormals[f]);
+        glNormal3dv(fnormals[f].data());
         Surface_mesh::Vertex_around_face_circulator vit, vend;
         vit = vend = mesh()->vertices(f);
-        do{ glVertex3dv(points[vit]); } while(++vit != vend);
+        do{ glVertex3dv(points[vit].data()); } while(++vit != vend);
         glEnd();
     }
 
@@ -252,7 +252,7 @@ void surfacemesh_mode_arapdeform::drawWithNames()
         glBegin(GL_POLYGON);
         Surface_mesh::Vertex_around_face_circulator vit, vend;
         vit = vend = mesh()->vertices(f);
-        do{ glVertex3dv(points[vit]); } while(++vit != vend);
+        do{ glVertex3dv(points[vit].data()); } while(++vit != vend);
         glEnd();
         glPopName();
     }
@@ -309,7 +309,7 @@ void surfacemesh_mode_arapdeform::initDeform()
 
     // Set control points and find handle center
     QSet<Vertex> cpoints = controlPoints();
-    Vector3 handleCenter(0);
+    Vector3 handleCenter(0.0);
 
     foreach(Vertex v, cpoints){
         deformer->UpdateControl(v, points[v]);

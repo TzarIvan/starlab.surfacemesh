@@ -43,8 +43,8 @@ bool read_off(Surface_mesh& mesh, const std::string& filename)
     int err = 0;
     unsigned int       i, j, idx;
     unsigned int       nV, nF, nE;
-    Vec3f              p, n;
-    Vec2f              t;
+    Eigen::Vector3d    p, n;
+    Eigen::Vector2d    t;
     Surface_mesh::Vertex  v;
     char               line[100], *c;
     bool               has_texcoords = false;
@@ -136,7 +136,7 @@ bool read_off(Surface_mesh& mesh, const std::string& filename)
             }
             else
             {
-                err = fscanf(in, "%f %f %f %f %f %f %f %f", &p[0], &p[1], &p[2], &n[0], &n[1], &n[2], &t[0], &t[1]);
+                err = fscanf(in, "%lf %lf %lf %lf %lf %lf %lf %lf", &p[0], &p[1], &p[2], &n[0], &n[1], &n[2], &t[0], &t[1]);
             }
             v = mesh.add_vertex(p);
             normals[v] = n;
@@ -155,7 +155,7 @@ bool read_off(Surface_mesh& mesh, const std::string& filename)
             }
             else
             {
-                err = fscanf(in, "%f %f %f %f %f %f", &p[0], &p[1], &p[2], &n[0], &n[1], &n[2]);
+                err = fscanf(in, "%lf %lf %lf %lf %lf %lf", &p[0], &p[1], &p[2], &n[0], &n[1], &n[2]);
             }
             v = mesh.add_vertex(p);
             normals[v] = n;
@@ -172,7 +172,7 @@ bool read_off(Surface_mesh& mesh, const std::string& filename)
             }
             else
             {
-                err = fscanf(in, "%f %f %f %f %f", &p[0], &p[1], &p[2], &t[0], &t[1]);
+                err = fscanf(in, "%lf %lf %lf %lf %lf", &p[0], &p[1], &p[2], &t[0], &t[1]);
             }
             v = mesh.add_vertex(p);
             texcoords[v][0] = t[0];
@@ -189,7 +189,7 @@ bool read_off(Surface_mesh& mesh, const std::string& filename)
             }
             else
             {
-                err = fscanf(in, "%f %f %f", &p[0], &p[1], &p[2]);
+                err = fscanf(in, "%lf %lf %lf", &p[0], &p[1], &p[2]);
             }
             mesh.add_vertex(p);
         }

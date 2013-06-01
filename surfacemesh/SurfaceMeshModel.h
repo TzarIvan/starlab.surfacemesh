@@ -14,10 +14,10 @@ namespace SurfaceMesh{
 /// @ingroup surfacemesh
 /// @{ 
     typedef Surface_mesh::Scalar    Scalar;              ///< Scalar type
-    typedef Surface_mesh::Vector3   Vector3;             ///< 3D Vector type
-    typedef Surface_mesh::Point     Point;               ///< Point type
-    typedef Surface_mesh::Normal    Normal;              ///< Point type
-    typedef Surface_mesh::Color     Color;               ///< Point type
+    typedef Eigen::Vector3d         Vector3;             ///< 3D Vector type
+    typedef Eigen::Vector3d         Point;               ///< Point type
+    typedef Eigen::Vector3d         Normal;              ///< Point type
+    typedef Eigen::Vector3d         Color;               ///< Point type
     typedef int                     Integer;             ///< int
     typedef unsigned int            Counter;             ///< To count stuff
     typedef unsigned int            Size;                ///< @obsolete To index stuff (i.e. matlab pointer) 
@@ -26,7 +26,15 @@ namespace SurfaceMesh{
     typedef Surface_mesh::Halfedge                  Halfedge;
     typedef Surface_mesh::Vertex                    Vertex;
     typedef Surface_mesh::Face                      Face;
-/// @} 
+/// @}
+
+/// @defgroup surfacemesh_compatibility_types Back-compatibility types
+/// @ingroup surfacemesh
+/// @{
+    // these are to avoid problems from conversion from Surface_mesh::Vector
+    template <class T> Scalar dot(const T& a, const T&b){ return a.dot(b); }
+    typedef Eigen::Vector3d Vec3d;
+/// @}
 
 /// @defgroup surfacemesh_property_names Default property names
 /// The std::string constants you should use to access SurfaceMesh dynamic properties.

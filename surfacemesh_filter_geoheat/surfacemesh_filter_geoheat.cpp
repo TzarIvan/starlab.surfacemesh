@@ -2,6 +2,8 @@
 #include "StarlabDrawArea.h"
 #include "GeoDrawObjects.h"
 
+static uint qHash( const Vertex &key ){return qHash(key.idx()); }
+
 void surfacemesh_filter_geoheat::initParameters(RichParameterSet *pars)
 {
     pars->addParam(new RichInt("sourceVertex", 0, "Source vertex"));

@@ -252,7 +252,7 @@ void
 Surface_mesh::
 property_stats() const
 {
-    qWarning() << "TODO: Surface_mesh::property_stats() broken under new compiler";
+    // qWarning() << "TODO: Surface_mesh::property_stats() broken under new compiler";
 #if 0
     std::vector<std::string> props;
 
@@ -719,7 +719,9 @@ compute_face_normal(Face f) const
 
     if (next_halfedge(h) == hend) // face is a triangle
     {
-        return cross(p2-=p1, p0-=p1).normalize();
+        p2-=p1;
+        p0-=p1;
+        return p2.cross(p0).normalized();
     }
 
     else // face is a general polygon
@@ -729,7 +731,7 @@ compute_face_normal(Face f) const
         hend = h;
         do
         {
-            n += cross(p2-p1, p0-p1);
+            n += (p2-p1).cross(p0-p1);
             h  = next_halfedge(h);
             p0 = p1;
             p1 = p2;
@@ -737,7 +739,7 @@ compute_face_normal(Face f) const
         }
         while (h != hend);
 
-        return n.normalize();
+        return n.normalized();
     }
 }
 
@@ -792,12 +794,12 @@ compute_vertex_normal(Vertex v) const
                 p2 -= p0;
                 p2.normalize();
 
-                cosine = dot(p1,p2) / sqrt(dot(p1,p1)*dot(p2,p2));
+                cosine = p1.dot(p2) / sqrt(p1.dot(p1)*p2.dot(p2));
                 if      (cosine < -1.0) cosine = -1.0;
                 else if (cosine >  1.0) cosine =  1.0;
                 angle = acos(cosine);
 
-                n   = cross(p1,p2).normalize();
+                n   = p1.cross(p2).normalized();
                 n  *= angle;
                 nn += n;
             }

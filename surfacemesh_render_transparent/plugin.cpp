@@ -80,10 +80,11 @@ public:
             glDisable(GL_CULL_FACE);
             {
                 if(!has_vertex_color){
-                    Vec4d colorv(mesh()->color);
+                    QColor& c = mesh()->color;
+                    Eigen::Vector4d colorv(c.redF(), c.greenF(), c.blueF(), c.alphaF());
                     /// @todo minimum 10% transparency
                     colorv[3] = qMin(.1,colorv[3]);
-                    glColor4dv(colorv);
+                    glColor4dv(colorv.data());
                 }
                 glBegin(GL_TRIANGLES); 
                 foreach(DepthFace f, depthvec)
@@ -94,7 +95,8 @@ public:
                     do{	
                         if(has_vertex_color){
                             // Fog like effect
-                            glColor4dv(Vec4d(vcolor[fvit][0],vcolor[fvit][1],vcolor[fvit][2], 1 - f.first));
+                            Eigen::Vector4d colv(vcolor[fvit][0],vcolor[fvit][1],vcolor[fvit][2], 1 - f.first);
+                            glColor4dv(colv.data());
                         }
     
                         gl::glNormal(vnormals[fvit]);

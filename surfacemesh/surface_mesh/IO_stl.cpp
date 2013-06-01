@@ -48,7 +48,7 @@ public:
 
   CmpVec(float _eps=FLT_MIN) : eps_(_eps) {}
 
-  bool operator()(const Vec3f& v0, const Vec3f& v1) const
+  bool operator()(const Eigen::Vector3d& v0, const Eigen::Vector3d& v1) const
   {
     if (fabs(v0[0] - v1[0]) <= eps_)
     {
@@ -73,14 +73,14 @@ bool read_stl(Surface_mesh& mesh, const std::string& filename)
 {
   char                            line[100], *c;
   unsigned int                    i, nT;
-  Vec3f                           p;
-  Surface_mesh::Vertex               v;
+  Eigen::Vector3d                 p;
+  Surface_mesh::Vertex            v;
   std::vector<Surface_mesh::Vertex>  vertices(3);
   size_t n_items(0);
 
   CmpVec comp(FLT_MIN);
-  std::map<Vec3f, Surface_mesh::Vertex, CmpVec>            vMap(comp);
-  std::map<Vec3f, Surface_mesh::Vertex, CmpVec>::iterator  vMapIt;
+  std::map<Eigen::Vector3d, Surface_mesh::Vertex, CmpVec>            vMap(comp);
+  std::map<Eigen::Vector3d, Surface_mesh::Vertex, CmpVec>::iterator  vMapIt;
 
 
   // open file (in ASCII mode)
@@ -173,7 +173,7 @@ bool read_stl(Surface_mesh& mesh, const std::string& filename)
           for (c=line; isspace(*c) && *c!='\0'; ++c) {};
 
           // read x, y, z
-          sscanf(c+6, "%f %f %f", &p[0], &p[1], &p[2]);
+          sscanf(c+6, "%lf %lf %lf", &p[0], &p[1], &p[2]);
 
           // has vector been referenced before?
           if ((vMapIt=vMap.find(p)) == vMap.end())

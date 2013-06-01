@@ -5,8 +5,10 @@
 #include "float.h"
 #include <qgl.h>
 #include "SurfaceMeshNormalsHelper.h"
+#include "SurfaceMeshModel.h"
 
 using namespace qglviewer;
+using namespace SurfaceMesh;
 
 // Fast OpenGL text
 #include "font.inl"
@@ -99,9 +101,9 @@ void surfacemesh_mode_info::drawWithNames()
 
 		glPushName(i);
 		glBegin(GL_POINTS);
-		QVector3D p1 = points[mesh()->vertex(e,0)];
-		QVector3D p2 = points[mesh()->vertex(e,1)];
-		QVector3D v = (p1 + p2) * 0.5;
+        Vector3 p1 = points[mesh()->vertex(e,0)];
+        Vector3 p2 = points[mesh()->vertex(e,1)];
+        Vector3 v = (p1 + p2) * 0.5;
 		glVertex3d(v.x(), v.y(), v.z());
 		glEnd();
 		glPopName();
@@ -207,9 +209,9 @@ void surfacemesh_mode_info::drawIndex(DrawElementType indexType, QColor color, d
 			Face f = mesh()->face(mesh()->halfedge(e,0));
 			if(mesh()->is_valid(f) && dot(faceNormals[f], cameraNormal) > vt) continue;
 
-			QVector3D p1 = points[mesh()->vertex(e,0)];
-			QVector3D p2 = points[mesh()->vertex(e,1)];
-			QVector3D c = (p1 + p2) * 0.5;
+            Vector3 p1 = points[mesh()->vertex(e,0)];
+            Vector3 p2 = points[mesh()->vertex(e,1)];
+            Vector3 c = (p1 + p2) * 0.5;
 
 			drawIndexEdge(e.idx(), c);
 		}
@@ -220,9 +222,9 @@ void surfacemesh_mode_info::drawIndex(DrawElementType indexType, QColor color, d
 			Face f = mesh()->face(h);
 			if(mesh()->is_valid(f) && dot(faceNormals[f], cameraNormal) > vt) continue;
 
-			QVector3D p1 = points[mesh()->from_vertex(h)];
-			QVector3D p2 = points[mesh()->to_vertex(h)];
-			QVector3D c = (p1 + p2 + faceCenters[f]) / 3.0;
+            Vector3 p1 = points[mesh()->from_vertex(h)];
+            Vector3 p2 = points[mesh()->to_vertex(h)];
+            Vector3 c = (p1 + p2 + faceCenters[f]) / 3.0;
 
 			drawIndexEdge(h.idx(), c);
 		}
@@ -263,21 +265,21 @@ void surfacemesh_mode_info::endDrawIndex()
 
 void surfacemesh_mode_info::drawIndexVertex( Vertex v, bool isShadow )
 {
-	QVector3D p = points[v];
-	Vec proj = cameraProjection(p);
+    Vector3 p = points[v];
+    Vec proj = cameraProjection(p);
 	sprintf(gl_text_buf,"%d", v.idx());
 	drawStringQuad(proj.x - (stringWidth(gl_text_buf) * 0.5), proj.y, gl_text_buf, isShadow);
 }
 
 void surfacemesh_mode_info::drawIndexFace( Face f, bool isShadow )
 {
-	QVector3D c = faceCenters[f];
+    Vector3 c = faceCenters[f];
 	Vec proj = cameraProjection(c);
 	sprintf(gl_text_buf,"%d", f.idx());
 	drawStringQuad(proj.x - (stringWidth(gl_text_buf) * 0.5), proj.y, gl_text_buf, isShadow);
 }
 
-void surfacemesh_mode_info::drawIndexEdge( int i, QVector3D c, bool isShadow )
+void surfacemesh_mode_info::drawIndexEdge( int i, Vector3 c, bool isShadow )
 {
 	Vec proj = cameraProjection(c);
 	sprintf(gl_text_buf,"%d", i);
@@ -304,8 +306,8 @@ void surfacemesh_mode_info::drawSelectedItem()
                 glBegin(GL_LINES);
                 do {
                     Edge e = mesh()->edge(adjE);
-                    QVector3D p1 = points[mesh()->vertex(e,0)];
-                    QVector3D p2 = points[mesh()->vertex(e,1)];
+                    Vector3 p1 = points[mesh()->vertex(e,0)];
+                    Vector3 p2 = points[mesh()->vertex(e,1)];
                     glVertex3d(p1.x(), p1.y(), p1.z());
                     glVertex3d(p2.x(), p2.y(), p2.z());
                 } while(++adjE != eend);
@@ -347,9 +349,9 @@ void surfacemesh_mode_info::drawSelectedItem()
                 Surface_mesh::Halfedge_around_vertex_circulator adjE(mesh(), v), eend = adjE;
                 do {
                     Edge e = mesh()->edge(adjE);
-                    QVector3D p1 = points[mesh()->vertex(e,0)];
-                    QVector3D p2 = points[mesh()->vertex(e,1)];
-                    QVector3D c = (p1 + p2) * 0.5;
+                    Vector3 p1 = points[mesh()->vertex(e,0)];
+                    Vector3 p2 = points[mesh()->vertex(e,1)];
+                    Vector3 c = (p1 + p2) * 0.5;
                     drawIndexEdge(e.idx(), c);
                 } while(++adjE != eend);
             }
@@ -371,7 +373,7 @@ void surfacemesh_mode_info::drawSelectedItem()
 			glBegin(GL_POLYGON);
 				Surface_mesh::Vertex_around_face_circulator vit, vend;
 				vit = vend = mesh()->vertices(f);
-				do{ glVertex3dv(points[vit]); } while(++vit != vend);
+                do{ glVertex3dv(points[vit].data()); } while(++vit != vend);
 			glEnd();
 
 			// Draw face edges
@@ -379,7 +381,7 @@ void surfacemesh_mode_info::drawSelectedItem()
 			glLineWidth(3.0f);
 			glBegin(GL_LINE_LOOP);
 				vit = vend = mesh()->vertices(f);
-				do{ glVertex3dv(points[vit]); } while(++vit != vend);
+                do{ glVertex3dv(points[vit].data()); } while(++vit != vend);
 			glEnd();
 			glEnable(GL_DEPTH_TEST);
 
@@ -399,9 +401,9 @@ void surfacemesh_mode_info::drawSelectedItem()
 			Surface_mesh::Halfedge_around_face_circulator adjE(mesh(), f), eend = adjE;
 			do { 
 				Edge e = mesh()->edge(adjE);
-				QVector3D p1 = points[mesh()->vertex(e,0)];
-				QVector3D p2 = points[mesh()->vertex(e,1)];
-				QVector3D c = (p1 + p2) * 0.5;
+                Vector3 p1 = points[mesh()->vertex(e,0)];
+                Vector3 p2 = points[mesh()->vertex(e,1)];
+                Vector3 c = (p1 + p2) * 0.5;
 				drawIndexEdge(e.idx(), c); 
 			} while(++adjE != eend);
 
@@ -428,13 +430,13 @@ void surfacemesh_mode_info::drawSelectedItem()
 			glBegin(GL_POLYGON);
 			Surface_mesh::Vertex_around_face_circulator vit, vend;
 			vit = vend = mesh()->vertices(f1);
-			do{ glVertex3dv(points[vit]); } while(++vit != vend);
+            do{ glVertex3dv(points[vit].data()); } while(++vit != vend);
 			glEnd();
 			
 			if(mesh()->is_valid(f2)){
 				glBegin(GL_POLYGON);
 				vit = vend = mesh()->vertices(f2);
-				do{ glVertex3dv(points[vit]); } while(++vit != vend);
+                do{ glVertex3dv(points[vit].data()); } while(++vit != vend);
 				glEnd();
 			}
 
@@ -442,16 +444,16 @@ void surfacemesh_mode_info::drawSelectedItem()
 			glColor4d(0.8,0.8,1,1);
 			glLineWidth(3.0f);
 			glBegin(GL_LINES);
-			glVertex3dv(points[mesh()->vertex(e,0)]);
-			glVertex3dv(points[mesh()->vertex(e,1)]);
+            glVertex3dv(points[mesh()->vertex(e,0)].data());
+            glVertex3dv(points[mesh()->vertex(e,1)].data());
 			glEnd();
 
 			beginDrawIndex();
 
 			// Draw edge index
-			QVector3D p1 = points[mesh()->vertex(e,0)];
-			QVector3D p2 = points[mesh()->vertex(e,1)];
-			QVector3D c = (p1 + p2) * 0.5;
+            Vector3 p1 = points[mesh()->vertex(e,0)];
+            Vector3 p2 = points[mesh()->vertex(e,1)];
+            Vector3 c = (p1 + p2) * 0.5;
 			glColor4d(0,0,1,1);
 			drawIndexEdge(e.idx(), c);
 
@@ -480,7 +482,8 @@ void surfacemesh_mode_info::drawItemInfo()
 	QString log;
 
 	switch(selectedType){
-	case VERT_IDX:
+    case HDGE_IDX: break;
+    case VERT_IDX:
 		{
 			// Position
 			Vertex v(selectedIdx);
@@ -579,7 +582,7 @@ void surfacemesh_mode_info::drawItemInfo()
 				Vector3 pa = points[mesh()->to_vertex(mesh()->next_halfedge(mesh()->halfedge(e, 0)))];
 				Vector3 pb = points[mesh()->to_vertex(mesh()->next_halfedge(mesh()->halfedge(e, 1)))];
 
-				sign = dot(pb - pa, faceNormals[f1]);
+                sign = (pb-pa).dot(faceNormals[f1]);
 			}
 
 			log += QString("Edge (%1)\n").arg(e.idx());
@@ -618,7 +621,7 @@ void surfacemesh_mode_info::endSelection( const QPoint& p )
 	drawArea()->defaultEndSelection(p);
 }
 
-qglviewer::Vec surfacemesh_mode_info::cameraProjection( QVector3D c )
+qglviewer::Vec surfacemesh_mode_info::cameraProjection( Vector3 c )
 {
 	return drawArea()->camera()->projectedCoordinatesOf(Vec(c.x(), c.y(), c.z()));
 }

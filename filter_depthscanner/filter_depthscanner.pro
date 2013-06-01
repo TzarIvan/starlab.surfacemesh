@@ -1,8 +1,9 @@
-load($$[STARLAB])
-load($$[SURFACEMESH])
-load($$[OCTREE])
-load($$[EIGEN])
+include($$[STARLAB])
+include($$[OCTREE])
+include($$[SURFACEMESH])
 StarlabTemplate(plugin)
+
+message($$INCLUDEPATH)
 
 HEADERS += SurfaceMesh/DepthTriangulator.h
 

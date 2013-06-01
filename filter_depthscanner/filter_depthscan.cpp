@@ -7,8 +7,8 @@ Q_EXPORT_PLUGIN(filter_depthscan)
 #include "StarlabDrawArea.h"
 #include "SurfaceMeshNormalsHelper.h"
 #include "SurfaceMesh/DepthTriangulator.h"
-#include "Octree.h"
 #include "Eigen/Dense"
+#include "Octree.h"
 
 using namespace SurfaceMesh;
 using namespace Eigen;
@@ -31,7 +31,8 @@ inline bool isnan(double a){ return (a!=a); }
 
 void filter_depthscan::initParameters(RichParameterSet* pars){
     double noisedefault = 0.0025;
-    if(model()) noisedefault = model()->bbox().size().length() * .0025;
+    if(model())
+        noisedefault = model()->bbox().diagonal().norm() * .0025;
 
     pars->addParam( new RichInt("density", 5, "A ray every K-pixels", "How many rays to shoot? (clamped [1,inf])") );
     pars->addParam( new RichFloat("maxangle", 80, "Grazing TH < ", "Discard when above certain grazing angle (degrees)") );
@@ -96,7 +97,7 @@ void filter_depthscan::applyFilter(RichParameterSet* pars){
             Vector3 dir(_dir[0],_dir[1],_dir[2]);
             dir.normalize(); ///< just to be sure
             int isectHit = -1;
-            Vec3d ipoint = octree.closestIntersectionPoint( Ray(orig, dir), &isectHit );
+            Eigen::Vector3d ipoint = octree.closestIntersectionPoint( Ray(orig, dir), &isectHit );
             
             X(i,j).xyz[0] = std::numeric_limits<Scalar>::quiet_NaN();
             if(isectHit>=0){

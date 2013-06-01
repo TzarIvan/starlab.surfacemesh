@@ -41,18 +41,18 @@ public:
 
                 /// if possible, add triangles
                 if( v1.is_valid() && v2.is_valid() && v3.is_valid() ) {
-                    Vector3 n1 = cross((points[v1]-points[v2]),(points[v1]-points[v3])).normalize();
-                    if(std::abs(dot(n1,m(i,j).view))>mincosangle &&
-                       std::abs(dot(n1,m(i,j+1).view))>mincosangle &&
-                       std::abs(dot(n1,m(i+1,j).view))>mincosangle)
+                    Vector3 n1 = ((points[v1]-points[v2]).cross(points[v1]-points[v3])).normalized();
+                    if(std::abs(n1.dot(m(i,j).view))>mincosangle &&
+                       std::abs(n1.dot(m(i,j+1).view))>mincosangle &&
+                       std::abs(n1.dot(m(i+1,j).view))>mincosangle)
                         mesh->add_triangle(v1, v2, v3);
                 }
 
                 if( v3.is_valid() && v2.is_valid() && v4.is_valid() ) {
-                    Vector3 n2 = cross((points[v2]-points[v3]),(points[v2]-points[v4])).normalize();
-                    if(std::abs(dot(n2,m(i+1,j+1).view))>mincosangle &&
-                       std::abs(dot(n2,m(i,j+1).view))>mincosangle &&
-                       std::abs(dot(n2,m(i+1,j).view))>mincosangle)
+                    Vector3 n2 = ((points[v2]-points[v3]).cross(points[v2]-points[v4])).normalized();
+                    if(std::abs(n2.dot(m(i+1,j+1).view))>mincosangle &&
+                       std::abs(n2.dot(m(i,j+1).view))>mincosangle &&
+                       std::abs(n2.dot(m(i+1,j).view))>mincosangle)
                         mesh->add_triangle(v3, v2, v4);
                 }
             }   

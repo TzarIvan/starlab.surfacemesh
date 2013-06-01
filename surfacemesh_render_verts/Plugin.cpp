@@ -94,9 +94,9 @@ class PointCloudRenderer : public SurfaceMeshRenderer{
                         if(has_vertex_color)
                             glColor3dv(vcolor[v].data());
                         normal = normals[v];
-                        if(double_side && dot(points[v]-camera_position,normals[v])>0)
+                        if(double_side && (points[v]-camera_position).dot(normals[v])>0)
                             normal = -normal;
-                        glNormal3dv(normal);
+                        glNormal3dv(normal.data());
                         glVertex3dv(points[v].data());
                     } 
                 glEnd();

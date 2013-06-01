@@ -26,7 +26,7 @@ HEADERS += SurfaceMeshModel.h \
 SOURCES += SurfaceMeshModel.cpp
 
 # THESE ARE THE ONES OF THE REAL LIBRARY
-HEADERS += geometry/Vector.h
+HEADERS +=
 HEADERS += geometry/Quadric.h
 HEADERS += surface_mesh/properties.h
 HEADERS += surface_mesh/Surface_mesh.h

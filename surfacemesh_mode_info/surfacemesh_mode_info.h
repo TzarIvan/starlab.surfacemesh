@@ -29,13 +29,13 @@ class surfacemesh_mode_info : public SurfaceMeshModePlugin{
     void beginDrawIndex();
     void drawIndexVertex(Vertex,bool shadow=false);
     void drawIndexFace(Face,bool shadow=false);
-    void drawIndexEdge(int,QVector3D,bool shadow=false);
+    void drawIndexEdge(int, Vector3, bool shadow=false);
     void endDrawIndex();
 
     void drawSelectedItem();
     void drawItemInfo();
 
-    qglviewer::Vec cameraProjection(QVector3D);
+    qglviewer::Vec cameraProjection(Vector3);
 
     Vector3VertexProperty points;
     Vector3FaceProperty faceCenters;

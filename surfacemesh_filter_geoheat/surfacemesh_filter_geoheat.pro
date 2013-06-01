@@ -1,7 +1,6 @@
-load($$[STARLAB])
-load($$[SURFACEMESH])
-load($$[CHOLMOD])
-load($$[EIGEN])
+include($$[STARLAB])
+include($$[SURFACEMESH])
+include($$[CHOLMOD])
 StarlabTemplate(plugin)
 
 HEADERS += surfacemesh_filter_geoheat.h

@@ -16,8 +16,6 @@ using namespace SurfaceMesh;
 #define EPSILON 1e-12
 typedef CholmodSupernodalLLT< SparseMatrix<double> > CholmodSolver;
 
-static uint qHash( const Vertex &key ){return qHash(key.idx()); }
-
 class GeoHeatHelper : public SurfaceMeshHelper{
 
 public:
@@ -49,7 +47,7 @@ public:
         vcot        = mesh->vertex_property<Scalar> ("v:cotan", 0);
         vfunction   = mesh->vertex_property<Scalar> ("v:function", 0);
         ecot        = mesh->edge_property<Scalar>   ("e:cotan", 0);
-        fgradient   = mesh->face_property<Vector3>  ("f:gradient", Vector3(0));
+        fgradient   = mesh->face_property<Vector3>  ("f:gradient", Vector3(0.0));
 
 		t_factor = 1.0;
     }
@@ -145,10 +143,10 @@ public:
             Vertex vj = mesh->vertex(e, 1);
 
             Vertex v_a = mesh->to_vertex(mesh->next_halfedge(mesh->halfedge(e, 0)));
-            if(has_halfedge(v_a, vj)) cot_alpha = dot(points[vi]-points[v_a], points[vj]-points[v_a]) / cross(points[vi]-points[v_a], points[vj]-points[v_a]).norm();
+            if(has_halfedge(v_a, vj)) cot_alpha = (points[vi]-points[v_a]).dot(points[vj]-points[v_a]) / (points[vi]-points[v_a]).cross(points[vj]-points[v_a]).norm();
 
             Vertex v_b = mesh->to_vertex(mesh->next_halfedge(mesh->halfedge(e, 1)));
-            if(has_halfedge(v_b, vi)) cot_beta  = dot(points[vi]-points[v_b], points[vj]-points[v_b]) / cross(points[vi]-points[v_b], points[vj]-points[v_b]).norm();
+            if(has_halfedge(v_b, vi)) cot_beta  = (points[vi]-points[v_b]).dot(points[vj]-points[v_b]) / (points[vi]-points[v_b]).cross(points[vj]-points[v_b]).norm();
 
             Scalar cots = (0.5 * (cot_alpha + cot_beta));
 
@@ -175,13 +173,13 @@ public:
     {
         // Compute gradient on faces
         foreach(Face f, mesh->faces()){
-            Vector3 vsum(0);
+            Vector3 vsum(0.0);
 
             Surface_mesh::Halfedge_around_face_circulator h(mesh, f), hend = h;
             do{
                 Vector3 ei = points[mesh->from_vertex(h)] - points[mesh->from_vertex(mesh->prev_halfedge(h))];
                 Vertex i = mesh->to_vertex(h);
-                vsum += u[i] * cross(fnormal[f], ei);
+                vsum += u[i] * fnormal[f].cross(ei);
             }while (++h != hend);
 
             fgradient[f] = ( 1.0 / (2.0 * farea[f]) ) * vsum;
@@ -215,12 +213,12 @@ public:
                 Vector3 e2 = p2 - pi;
 
                 // Angles
-                double theta1 = acos( dot((p1-p2).normalized(), (pi-p2).normalized()) );
-                double theta2 = acos( dot((p2-p1).normalized(), (pi-p1).normalized()) );
+                double theta1 = acos( ((p1-p2).normalized()).dot((pi-p2).normalized()) );
+                double theta2 = acos( ((p2-p1).normalized()).dot((pi-p1).normalized()) );
                 double cot1 = 1.0 / tan(theta1);
                 double cot2 = 1.0 / tan(theta2);
 
-                sum_j += (cot1 * dot(e1, Xj)) + (cot2 * dot(e2, Xj));
+                sum_j += (cot1 * (e1).dot(Xj)) + (cot2 * (e2).dot(Xj));
 
             } while(++j != hend);
 
@@ -314,7 +312,7 @@ public:
         ScalarVertexProperty udist = getScalarVertexProperty("v:uniformDistance");
                 
         ecot        = mesh->edge_property<Scalar>   ("e:cotan", 0);
-        fgradient   = mesh->face_property<Vector3>  ("f:gradient", Vector3(0));
+        fgradient   = mesh->face_property<Vector3>  ("f:gradient", Vector3(0.0));
 
         mesh->remove_vertex_property(u);
         mesh->remove_vertex_property(vdiv);

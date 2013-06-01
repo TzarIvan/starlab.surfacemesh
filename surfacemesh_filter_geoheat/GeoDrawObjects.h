@@ -1,17 +1,18 @@
 #pragma once
 
 #include "RenderObject.h"
+#include "Eigen/Dense"
 
 #define glVertQt(v) glVertex3d(v.x(), v.y(), v.z())
 #define glColorQt(c) glColor4d(c.redF(), c.greenF(), c.blueF(), c.alphaF())
 
 class PointSoup : public RenderObject::Base{
-	QVector< QVector3D > points;
+    QVector< Vector3 > points;
 	QVector< QColor > points_colors;
 public:
 	PointSoup():RenderObject::Base(1, Qt::black){}
 
-    virtual void draw(QGLWidget& widget){
+    virtual void draw(QGLWidget& /*widget*/){
 		glDisable(GL_LIGHTING);
 
 		glPointSize(6);
@@ -25,27 +26,27 @@ public:
 		glEnable(GL_LIGHTING);
 	}
 
-	void addPoint(const QVector3D& p, const QColor& c = Qt::blue){
+    void addPoint(const Vector3& p, const QColor& c = Qt::blue){
 		points.push_back(p);
 		points_colors.push_back(c);
 	}
 };
 
 class VectorSoup : public RenderObject::Base{
-    QVector< QPair<QVector3D,QVector3D> > vectors;
+    QVector< QPair<Vector3,Vector3> > vectors;
     QVector< double > vectorLengths;
     double maxLen;
 public:
     VectorSoup(const QColor& c = Qt::green):RenderObject::Base(1, c){ maxLen = -DBL_MAX; }
 
-    void addVector(const QVector3D& start, const QVector3D& direction){
+    void addVector(const Vector3& start, const Vector3& direction){
         vectors.push_back( qMakePair(start,direction) );
-        double l = direction.length();
+        double l = direction.norm();
         vectorLengths.push_back(l);
         maxLen = qMax(l,maxLen);
     }
 
-    virtual void draw(QGLWidget& widget){
+    virtual void draw(QGLWidget& /*widget*/){
         glDisable(GL_LIGHTING);
         glLineWidth(1);
         glBegin(GL_LINES);
