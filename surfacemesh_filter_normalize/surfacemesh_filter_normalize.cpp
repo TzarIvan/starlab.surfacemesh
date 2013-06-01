@@ -3,11 +3,11 @@
 
 using namespace SurfaceMesh;
 
-QString printBounding(QBox3D box){
+QString printBounding(Eigen::AlignedBox3d box){
     QString retval;
     QTextStream sout(&retval);
-    QVector3D c = box.center();
-    QVector3D s   = box.size();
+    Eigen::Vector3d c = box.center();
+    Eigen::Vector3d s = box.diagonal();
     sout << "Center[" << c.x() << " " << c.y() << " " << c.z() << "]" 
          << "  Size[" << s.x() << " " << s.y() << " " << s.z() << "]";
     return retval;
@@ -17,12 +17,12 @@ void surfacemesh_filter_normalize::applyFilter(RichParameterSet*){
     qDebug() << "Old bounding box: " << printBounding(mesh()->bbox());
     
     /// Just to be sure... update it
-    mesh()->updateBoundingBox();        
-    QBox3D bbox = mesh()->bbox();
-    Vector3 offset = bbox.center();
+    mesh()->updateBoundingBox();
+    Eigen::AlignedBox3d bbox = mesh()->bbox();
+    Eigen::Vector3d offset = bbox.center();
     
     /// Normalize to have longest side size = 1
-    QVector3D s = bbox.size();
+    Eigen::Vector3d s = bbox.diagonal();
     Scalar scale = qMax(s.x(),qMax(s.y(),s.z()));
  
     Vector3VertexProperty points = mesh()->vertex_coordinates();

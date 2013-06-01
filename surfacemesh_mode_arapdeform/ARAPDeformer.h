@@ -52,7 +52,7 @@ public:
         isAnchorPoint[v] = true;
     }
 
-	void UpdateControl( const Surface_mesh::Vertex & v, const Vec3d & newPos ){
+	void UpdateControl( const Surface_mesh::Vertex & v, const Eigen::Vector3d & newPos ){
 		isControlPoint[v] = true;
 		points[v] = newPos;
 		isSolverReady = false;

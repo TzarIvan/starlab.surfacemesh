@@ -205,6 +205,6 @@ void ARAPDeformer::Deform( int ARAPIteration /*= 1*/ )
 	for (vit = mesh->vertices_begin(); vit != vend; ++vit)
     {
 		int i = Surface_mesh::Vertex(vit).idx();
-        points[vit] = Vec3d (xyz[0][i], xyz[1][i], xyz[2][i]);
+        points[vit] = Eigen::Vector3d (xyz[0][i], xyz[1][i], xyz[2][i]);
 	}
 }

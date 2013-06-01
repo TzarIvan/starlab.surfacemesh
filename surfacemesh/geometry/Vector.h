@@ -39,11 +39,6 @@
     #include <Eigen/Dense>
 #endif
 
-#ifdef WIN32
-    #undef min
-    #undef max
-#endif
-
 /// \addtogroup geometry geometry
 /// @{
 
@@ -56,7 +51,8 @@ class Vector
 public:
 #ifdef EIGEN
     Vector(const Eigen::Matrix<Scalar, N, 1>& v){
-        Eigen::Map<Eigen::Matrix<Scalar, N, 1> >(data_) = v;
+        Eigen::Map< Eigen::Matrix<Scalar, N, 1> > tmp(data_);
+        tmp = v;
     }
     operator Eigen::Matrix<Scalar, N, 1>(){
         return Eigen::Map<Eigen::Matrix<Scalar, N, 1> >(data_);
