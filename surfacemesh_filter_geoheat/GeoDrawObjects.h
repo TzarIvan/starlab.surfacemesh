@@ -12,7 +12,9 @@ class PointSoup : public RenderObject::Base{
 public:
 	PointSoup():RenderObject::Base(1, Qt::black){}
 
-    virtual void draw(QGLWidget& /*widget*/){
+    virtual void draw(QGLWidget& widget){
+        Q_UNUSED(widget)
+
 		glDisable(GL_LIGHTING);
 
 		glPointSize(6);
@@ -46,7 +48,9 @@ public:
         maxLen = qMax(l,maxLen);
     }
 
-    virtual void draw(QGLWidget& /*widget*/){
+    virtual void draw(QGLWidget& widget){
+        Q_UNUSED(widget)
+
         glDisable(GL_LIGHTING);
         glLineWidth(1);
         glBegin(GL_LINES);
