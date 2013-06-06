@@ -15,33 +15,19 @@ class SmoothRenderer : public SurfaceMeshRenderer{
     
         /// Initialize triangle buffer
         triangles.clear();
-        Surface_mesh::Face_iterator fit, fend=mesh()->faces_end();
-        Surface_mesh::Vertex_around_face_circulator fvit, fvend;
-        Surface_mesh::Vertex v0, v1, v2;
-        for (fit=mesh()->faces_begin(); fit!=fend; ++fit){
-            fvit = fvend = mesh()->vertices(fit);
-            v0 = fvit;
-            v2 = ++fvit;
-            do 
-            {
-                v1 = v2;
-                v2 = fvit;
-                triangles.push_back(v0.idx());
-                triangles.push_back(v1.idx());
-                triangles.push_back(v2.idx());
-            } 
-            while (++fvit != fvend);
-        }
+        foreach(Face f, mesh()->faces())
+            foreach(Vertex v, mesh()->vertices(f))
+                triangles.push_back(v.idx());
     }
     
     void render(){
-        Surface_mesh::Vertex_property<Point>  points = mesh()->vertex_property<Point>("v:point");    
-        Surface_mesh::Vertex_property<Point>  vnormals = mesh()->vertex_property<Point>("v:normal");
+        Surface_mesh::Vertex_property<Point>  points = mesh()->vertex_property<Point>(VPOINT);
+        Surface_mesh::Vertex_property<Point>  vnormals = mesh()->vertex_property<Point>(VNORMAL);
     
         // Deal with color
-        bool has_vertex_color = mesh()->has_vertex_property<Color>("v:color");
+        bool has_vertex_color = mesh()->has_vertex_property<Color>(VCOLOR);
         Surface_mesh::Vertex_property<Color>  vcolor;
-        if (has_vertex_color) vcolor = mesh()->get_vertex_property<Color>("v:color");
+        if (has_vertex_color) vcolor = mesh()->get_vertex_property<Color>(VCOLOR);
     
         // setup vertex arrays    
         gl::glVertexPointer(points.data());
