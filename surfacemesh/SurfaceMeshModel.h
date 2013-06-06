@@ -47,6 +47,7 @@ namespace SurfaceMesh{
 /// @{ 
     const std::string VPOINT = "v:point";           ///< vertex coordinates
     const std::string VNORMAL = "v:normal";         ///< vertex normals
+    const std::string VCOLOR = "v:color";           ///< vertex color
     const std::string VAREA = "v:area";             ///< vertex areas
     const std::string VQUALITY = "v:quality";       ///< vertex quality
     const std::string FNORMAL = "f:normal";         ///< face normals
