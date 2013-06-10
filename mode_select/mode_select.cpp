@@ -104,6 +104,6 @@ void mode_select::decorate(){
     
 }
 
-void mode_select::draw_with_names(){
+void mode_select::drawWithNames(){
        
 }

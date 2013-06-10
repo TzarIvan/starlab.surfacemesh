@@ -24,7 +24,7 @@ public:
     void create();
     void destroy();
     void decorate();
-    void draw_with_names();
+    void drawWithNames();
     
     bool mouseReleaseEvent(QMouseEvent*);
 
