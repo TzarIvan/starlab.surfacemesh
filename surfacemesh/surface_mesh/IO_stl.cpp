@@ -125,7 +125,7 @@ bool read_stl(Surface_mesh& mesh, const std::string& filename)
         if ((vMapIt=vMap.find(p)) == vMap.end())
         {
           // No : add vertex and remember idx/vector mapping
-          v = mesh.add_vertex((Point)p);
+          v = mesh.add_vertex(p);
           vertices[i] = v;
           vMap[p] = v;
         }
