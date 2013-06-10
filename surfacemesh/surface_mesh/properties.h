@@ -132,6 +132,11 @@ public:
         return &data_[0];
     }
 
+    T* data()
+    {
+        return &data_[0];
+    }
+
     /// Access the i'th element. No range check is performed!
     reference operator[](int _idx)
     {
@@ -192,7 +197,7 @@ public:
     {
         return parray_ != NULL;
     }
-    
+
     bool is_valid() const{
         return parray_ != NULL;
     }
@@ -215,6 +220,11 @@ public:
         return parray_->data();
     }
 
+    T* data()
+    {
+        assert(parray_ != NULL);
+        return parray_->data();
+    }
 
 private:
 
@@ -252,7 +262,7 @@ public:
 
     // copy constructor: performs deep copy of property arrays
     Property_container(const Property_container& _rhs) { operator=(_rhs); }
-    
+
     // assignment: performs deep copy of property arrays
     Property_container& operator=(const Property_container& _rhs)
     {
@@ -279,7 +289,7 @@ public:
             }
         }
     }
-    
+
     // returns the current size of the property arrays
     size_t size() const { return size_; }
 
@@ -317,11 +327,11 @@ public:
 
     // Verifies a property of given name & type exists
     template <class T> bool exists(const std::string& name)
-    {     
+    {
         Property<T> p = get<T>(name);
         return bool(p);
     }
-    
+
     // returns a property if it exists, otherwise it creates it first.
     template <class T> Property<T> get_or_add(const std::string& name, const T t=T())
     {
