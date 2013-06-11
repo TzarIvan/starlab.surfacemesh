@@ -618,7 +618,7 @@ void surfacemesh_mode_info::drawItemInfo()
 
 void surfacemesh_mode_info::endSelection( const QPoint& p )
 {
-	drawArea()->defaultEndSelection(p);
+    drawArea()->defaultEndSelection(p);
 }
 
 qglviewer::Vec surfacemesh_mode_info::cameraProjection( Vector3 c )

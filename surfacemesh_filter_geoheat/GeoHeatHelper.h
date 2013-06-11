@@ -16,6 +16,8 @@ using namespace SurfaceMesh;
 #define EPSILON 1e-12
 typedef CholmodSupernodalLLT< SparseMatrix<double> > CholmodSolver;
 
+static uint qHash( const Vertex &key ){return qHash(key.idx()); }
+
 class GeoHeatHelper : public SurfaceMeshHelper{
 
 public:
@@ -47,7 +49,7 @@ public:
         vcot        = mesh->vertex_property<Scalar> ("v:cotan", 0);
         vfunction   = mesh->vertex_property<Scalar> ("v:function", 0);
         ecot        = mesh->edge_property<Scalar>   ("e:cotan", 0);
-        fgradient   = mesh->face_property<Vector3>  ("f:gradient", Vector3(0.0));
+        fgradient   = mesh->face_property<Vector3>  ("f:gradient", Vector3(0,0,0));
 
 		t_factor = 1.0;
     }
@@ -173,7 +175,7 @@ public:
     {
         // Compute gradient on faces
         foreach(Face f, mesh->faces()){
-            Vector3 vsum(0.0);
+            Vector3 vsum(0,0,0);
 
             Surface_mesh::Halfedge_around_face_circulator h(mesh, f), hend = h;
             do{
@@ -312,7 +314,7 @@ public:
         ScalarVertexProperty udist = getScalarVertexProperty("v:uniformDistance");
                 
         ecot        = mesh->edge_property<Scalar>   ("e:cotan", 0);
-        fgradient   = mesh->face_property<Vector3>  ("f:gradient", Vector3(0.0));
+        fgradient   = mesh->face_property<Vector3>  ("f:gradient", Vector3(0,0,0));
 
         mesh->remove_vertex_property(u);
         mesh->remove_vertex_property(vdiv);
