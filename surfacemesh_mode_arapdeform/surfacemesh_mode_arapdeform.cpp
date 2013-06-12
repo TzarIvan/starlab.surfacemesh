@@ -50,7 +50,7 @@ void surfacemesh_mode_arapdeform::update()
     fnormals = mesh()->face_property<Vector3>(FNORMAL);
 }
 
-void surfacemesh_mode_arapdeform::endSelection(const QPoint &)
+bool surfacemesh_mode_arapdeform::endSelection(const QPoint &)
 {
     glFlush();
     GLint nbHits = glRenderMode(GL_RENDER);
@@ -84,6 +84,8 @@ void surfacemesh_mode_arapdeform::endSelection(const QPoint &)
                 break;
         }
     }
+
+    return true;
 }
 
 bool surfacemesh_mode_arapdeform::wheelEvent(QWheelEvent * e)
