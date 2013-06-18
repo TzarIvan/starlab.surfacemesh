@@ -5,6 +5,7 @@
 #include "float.h"
 #include <qgl.h>
 #include "SurfaceMeshNormalsHelper.h"
+#include "FaceBarycenterHelper.h"
 #include "SurfaceMeshModel.h"
 
 using namespace qglviewer;
@@ -29,16 +30,18 @@ bool surfacemesh_mode_info::documentChanged()
 
 void surfacemesh_mode_info::update()
 {
-	// to do: mesh needs to be consistent with selected mesh
+    // to do: mesh needs to be consistent with selected mesh
+    points = mesh()->vertex_coordinates();
+
 	SurfaceMeshHelper h(mesh());
+    faceAreas = h.computeFaceAreas();
+    elengs = h.computeEdgeLengths();
 
     SurfaceMesh::NormalsHelper nh(mesh());
     faceNormals = nh.compute_face_normals();
 
-	points = mesh()->vertex_coordinates();
-	faceCenters = h.computeFaceBarycenters();
-	faceAreas = h.computeFaceAreas();
-	elengs = h.computeEdgeLengths();
+    SurfaceMesh::FaceBarycenterHelper fh(mesh());
+    faceCenters = fh.compute();
 
 	visualize = QVector<bool>(HDGE_IDX+1, true);
 	visualize[HDGE_IDX] = false; // Hide half-edges by default
@@ -142,6 +145,7 @@ bool surfacemesh_mode_info::postSelection(const QPoint& p)
 
 bool surfacemesh_mode_info::endSelection( const QPoint& p )
 {
+    Q_UNUSED(p);
     return false;
 }
 
