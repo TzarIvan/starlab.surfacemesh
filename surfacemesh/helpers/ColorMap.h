@@ -10,6 +10,11 @@
 #define isinf(x) (!_finite(x))
 #endif
 
+// Temporary solution
+static inline Color toColor(QColor c){
+    return Color(c.redF(), c.greenF(), c.blueF());
+}
+
 class ColorMap{
 protected:
     Scalar min;
@@ -46,8 +51,8 @@ public:
     
     /// @todo maybe create a lookup table version?
     Color color(Scalar val){
-        if(!validRange) return Color(invalid.toRgb());
-        if(isnan(val)) return Color(invalid.toRgb());
+        if(!validRange) return Color(toColor(invalid.toRgb()));
+        if(isnan(val)) return Color(toColor(invalid.toRgb()));
         Scalar alpha = qBound( -1.0, val/largestBound, +1.0 ); // [-1,1]
         QColor retval;
         Scalar h,s,v;
@@ -66,7 +71,7 @@ public:
         }
         // qDebug() << h << s << v;
         retval.setHsvF(h,s,v);
-        return Color(retval.toRgb());
+        return Color(toColor(retval.toRgb()));
     }    
 };
 
@@ -84,8 +89,8 @@ public:
         invalid = Qt::black;
     }
     virtual Color color(Scalar val){
-        if(!validRange) return Color(invalid);
-        if(isnan(val)) return Color(invalid); //RED
+        if(!validRange) return Color(toColor(invalid));
+        if(isnan(val)) return Color(toColor(invalid)); //RED
         float alpha = qBound( 0.0, (val-min) / (max-min), 1.0 );
         
         Q_ASSERT(alpha>=0 && alpha<=1);

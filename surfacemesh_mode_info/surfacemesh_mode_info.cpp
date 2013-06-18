@@ -131,11 +131,18 @@ int surfacemesh_mode_info::correctIndex(int i)
     return i;
 }
 
-void surfacemesh_mode_info::postSelection(const QPoint& p)
+bool surfacemesh_mode_info::postSelection(const QPoint& p)
 {
 	Q_UNUSED(p);
 
     selectedIdx = correctIndex( drawArea()->selectedName() );
+
+    return true;
+}
+
+bool surfacemesh_mode_info::endSelection( const QPoint& p )
+{
+    return false;
 }
 
 void surfacemesh_mode_info::decorate()
@@ -614,11 +621,6 @@ void surfacemesh_mode_info::drawItemInfo()
 	beginDrawIndex();
 	drawStringQuad(50,50,qPrintable(log),true);
 	endDrawIndex();
-}
-
-void surfacemesh_mode_info::endSelection( const QPoint& p )
-{
-	drawArea()->defaultEndSelection(p);
 }
 
 qglviewer::Vec surfacemesh_mode_info::cameraProjection( Vector3 c )

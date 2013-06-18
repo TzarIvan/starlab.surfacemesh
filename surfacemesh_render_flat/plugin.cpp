@@ -113,6 +113,8 @@ class FlatRenderer : public SurfaceMeshRenderer{
     
     void render(){
 
+        if( vbo_flat.empty() ) return;
+
         gl::glVertexPointer(3, GL_DOUBLE, 0, &vbo_flat[0]);
         gl::glNormalPointer(GL_DOUBLE, 0, &fnormal_flat[0]);
         if(has_face_color)

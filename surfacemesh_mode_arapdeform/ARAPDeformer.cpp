@@ -49,20 +49,20 @@ void ARAPDeformer::ComputeCotWeights()
 
             if(!mesh->is_boundary(find_halfedge(pid, p2id))
                 &&!mesh->is_boundary(find_halfedge(p2id, pid))) // not a boundary edge
-				wij = dot((p-p1),(p2-p1)) / cross((p-p1),(p2-p1)).norm() + dot((p-p3),(p2-p3)) / cross((p-p3),(p2-p3)).norm();
+                wij = dot(Vector3(p-p1),Vector3(p2-p1)) / cross(Vector3(p-p1),Vector3(p2-p1)).norm() + dot(Vector3(p-p3),Vector3(p2-p3)) / cross(Vector3(p-p3),Vector3(p2-p3)).norm();
 			else // boundary edge, only have one such angle
 			{
 				if(p1id == p3id) // two angles are the same, e.g. corner of a square
 				{
-					wij = dot((p-p1),(p2-p1)) / cross((p-p1),(p2-p1)).norm();
+                    wij = dot(Vector3(p-p1),Vector3(p2-p1)) / cross(Vector3(p-p1),Vector3(p2-p1)).norm();
 				}
 				else // find the angle not on the boundary
 				{
                     if(!mesh->is_boundary(find_halfedge(pid, p1id))
                         &&!mesh->is_boundary(find_halfedge(p1id, pid)))
-						wij = dot((p-p1),(p2-p1)) / cross((p-p1),(p2-p1)).norm();
+                        wij = dot(Vector3(p-p1),Vector3(p2-p1)) / cross(Vector3(p-p1),Vector3(p2-p1)).norm();
 					else
-						wij = dot((p-p3),(p2-p3)) / cross((p-p3),(p2-p3)).norm();
+                        wij = dot(Vector3(p-p3),Vector3(p2-p3)) / cross(Vector3(p-p3),Vector3(p2-p3)).norm();
 				} 
 			}
 

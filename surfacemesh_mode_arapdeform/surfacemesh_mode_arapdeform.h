@@ -24,7 +24,7 @@ public:
     void create();
     void destroy(){}
 
-    void endSelection(const QPoint& p);
+    bool endSelection(const QPoint& p);
 
     void decorate();
     void drawHandle();

@@ -21,8 +21,8 @@ class surfacemesh_mode_info : public SurfaceMeshModePlugin{
 
     void decorate();
     void drawWithNames();
-    void postSelection(const QPoint& p);
-    void endSelection(const QPoint& p);
+    bool postSelection(const QPoint& p);
+    bool endSelection(const QPoint& p);
 
     void drawIndex(DrawElementType, QColor, double vt = -0.4);
 

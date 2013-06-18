@@ -50,7 +50,7 @@ void surfacemesh_mode_arapdeform::update()
     fnormals = mesh()->face_property<Vector3>(FNORMAL);
 }
 
-void surfacemesh_mode_arapdeform::endSelection(const QPoint &)
+bool surfacemesh_mode_arapdeform::endSelection(const QPoint &)
 {
     glFlush();
     GLint nbHits = glRenderMode(GL_RENDER);
@@ -84,6 +84,8 @@ void surfacemesh_mode_arapdeform::endSelection(const QPoint &)
                 break;
         }
     }
+
+    return true;
 }
 
 bool surfacemesh_mode_arapdeform::wheelEvent(QWheelEvent * e)
@@ -199,7 +201,7 @@ void surfacemesh_mode_arapdeform::decorate()
     }
 
     glColor4d(1,1,1,1);
-    drawArea()->drawText(50,50, info);
+    drawArea()->renderText(50,50, info);
 
     glEnable(GL_LIGHTING);
 }
@@ -309,7 +311,7 @@ void surfacemesh_mode_arapdeform::initDeform()
 
     // Set control points and find handle center
     QSet<Vertex> cpoints = controlPoints();
-    Vector3 handleCenter(0.0);
+    Vector3 handleCenter(0,0,0);
 
     foreach(Vertex v, cpoints){
         deformer->UpdateControl(v, points[v]);

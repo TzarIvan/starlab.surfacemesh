@@ -28,6 +28,7 @@
 #include <string>
 #include <algorithm>
 #include <cassert>
+#include <iostream>
 
 //== CLASS DEFINITION =========================================================
 
