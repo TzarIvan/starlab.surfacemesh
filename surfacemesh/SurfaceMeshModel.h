@@ -52,9 +52,8 @@ namespace SurfaceMesh{
     const std::string VQUALITY = "v:quality";       ///< vertex quality
     const std::string FNORMAL = "f:normal";         ///< face normals
     const std::string FAREA = "f:area";             ///< face area
-    const std::string FBARYCENTER="f:barycenter";   ///< face barycenter
     const std::string ELENGTH = "e:length";         ///< edge length
-    
+    const std::string FSELECTED = "f:selected";     ///< is face selected?    
 /// @}
   
 /// @defgroup surfacemesh_property_types Default property types

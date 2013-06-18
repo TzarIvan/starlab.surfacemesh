@@ -112,19 +112,6 @@ public:
         return varea;
     }
     
-    Vector3FaceProperty computeFaceBarycenters(const std::string property=FBARYCENTER){
-        Vector3FaceProperty barycenter = mesh->face_property<Vector3>(property);
-        foreach(Face fit, mesh->faces()){
-            // collect the triangle vertices
-            Surface_mesh::Vertex_around_face_circulator vfit = mesh->vertices(fit);
-            Surface_mesh::Vertex v0 = vfit;
-            Surface_mesh::Vertex v1 = ++vfit;
-            Surface_mesh::Vertex v2 = ++vfit;
-            barycenter[fit] = (points[v0]+points[v1]+points[v2])/3;
-        }
-        return barycenter;
-    }
-    
 public:
     class MissingPropertyException : public StarlabException{
     public:

@@ -21,7 +21,8 @@ HEADERS += SurfaceMeshModel.h \
     helpers/StatisticsHelper.h \
     helpers/SurfaceMeshNormalsHelper.h \
     iterators/StdIterators.h \ 
-    SurfaceMesh/NoiseGenerator.h
+    SurfaceMesh/NoiseGenerator.h \    
+    helpers/FaceBarycenterHelper.h
  
 SOURCES += SurfaceMeshModel.cpp
 
