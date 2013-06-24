@@ -1,6 +1,7 @@
+/// DO NOT INCLUDE EXPLICITLY, THIS IS INCLUDED BY SurfaceMeshModel.h
+
 #pragma once
 #include <iterator>
-
 namespace SurfaceMesh{
     class VertexCoordinatesIterator : public std::iterator<std::forward_iterator_tag,Vector3>{
     private:
@@ -16,11 +17,12 @@ namespace SurfaceMesh{
         }
     public:
         bool operator!=(Iterator it){ return this->it != it.it; }
+        /// prefix++
         Iterator&  operator++(){ ++it; return *this; } // ++myInstance.
-        value_type  operator*(){
-            Point& p = points[ Vertex(it) ];
-            return Vector3(p.x(), p.y(), p.z());
-        }
+        /// postfix++ (uses prefix)
+        Iterator operator++ (int /*val*/){ return operator++(); }
+        value_type* operator->(){ return &( points[ Vertex(it) ] ); }
+        value_type  operator*(){ return points[ Vertex(it) ]; }
         VertexCoordinatesIterator begin(){  this->it=mesh->vertices_begin(); return *this; }
         VertexCoordinatesIterator end(){ this->it=mesh->vertices_end();   return *this; }
     };
