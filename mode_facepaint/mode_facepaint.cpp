@@ -62,15 +62,18 @@ void mode_facepaint::drawWithNames(){
 }
 
 void mode_facepaint::decorate(){
+    glDisable(GL_LIGHTING);
+
     foreach(Face f, mesh->faces()){
         if( !fselect[f] ) 
             continue;
-        Vector3 fbary = fbarycenter[f];
+        Starlab::Vector3 fbary = fbarycenter[f];
         glPointSize(5);
         glColor3d(1.0,0.0,0.0);
-        glDisable(GL_LIGHTING);
         glBegin(GL_POINTS);
             glVertex3dv(fbary.data());
         glEnd();
     }
+
+    glEnable(GL_LIGHTING);
 }
