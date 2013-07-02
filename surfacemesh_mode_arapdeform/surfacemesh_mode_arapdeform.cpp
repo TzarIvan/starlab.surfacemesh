@@ -33,7 +33,7 @@ void surfacemesh_mode_arapdeform::create()
 {
     if(!widget)
     {
-        ModePluginDockWidget * dockwidget = new ModePluginDockWidget(mainWindow());
+        ModePluginDockWidget * dockwidget = new ModePluginDockWidget("As-rigid-as-possible deformation", mainWindow());
         widget = new arap_widget(this);
         dockwidget->setWidget(widget);
         mainWindow()->addDockWidget(Qt::RightDockWidgetArea,dockwidget);
