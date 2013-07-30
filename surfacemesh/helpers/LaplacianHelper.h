@@ -9,16 +9,16 @@ protected:
   
 public:
     LaplacianHelper(SurfaceMeshModel* mesh) : SurfaceMeshHelper(mesh){
-        laplace = mesh->vertex_property<Point>("v:laplace",Vector3(0));        
+        laplace = mesh->vertex_property<Point>("v:laplace",Vector3(0,0,0));        
     }
     virtual void applyLaplacianIteration(float damping=0.5f){
         foreach(Vertex v, mesh->vertices())
             points[v] += damping * laplace[v];
     }
-    Vector3VertexProperty computeLaplacianVectors(const string property="h:weight"){
+    Vector3VertexProperty computeLaplacianVectors(const std::string property="h:weight"){
         laplace = mesh->vertex_property<Vector3>(property);
         foreach(Vertex v, mesh->vertices()){
-            laplace[v] = 0;
+            laplace[v] = Vector3(0,0,0);
             Vector3 p = points[v];
             /// Up to this point it is the centroid
             foreach(Halfedge hi, mesh->onering_hedges(v)){
