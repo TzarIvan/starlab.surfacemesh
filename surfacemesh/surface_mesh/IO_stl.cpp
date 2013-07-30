@@ -24,6 +24,13 @@
 #include <float.h>
 #include <map>
 
+#ifndef FLT_MIN
+    #define FLT_MIN std::numeric_limits<float>::min()
+#endif
+#ifndef FLT_MAX
+    #define FLT_MAX std::numeric_limits<float>::max()
+#endif
+
 //== IMPLEMENTATION ===========================================================
 
 typedef Surface_mesh::Point Point;
