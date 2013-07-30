@@ -3,11 +3,11 @@
 
 using namespace SurfaceMesh;
 
-QString printBounding(QBox3D box){
+QString printBounding(const Starlab::BBox3& box){
     QString retval;
     QTextStream sout(&retval);
-    QVector3D c = box.center();
-    QVector3D s   = box.size();
+    Vector3 c = box.center();
+    Vector3 s = box.diagonal();
     sout << "Center[" << c.x() << " " << c.y() << " " << c.z() << "]" 
          << "  Size[" << s.x() << " " << s.y() << " " << s.z() << "]";
     return retval;
@@ -25,7 +25,7 @@ void surfacemesh_filter_addnoise::initParameters(RichParameterSet *pars){
 }
 
 void surfacemesh_filter_addnoise::applyFilter(RichParameterSet* pars){
-    Scalar bboxdiag = mesh()->bbox().size().length();   
+    Scalar bboxdiag = mesh()->bbox().diagonal().norm();   
     Scalar noise = bboxdiag*pars->getFloat("noiseperc");
 
     if( pars->getString("mode") == "Normal Noise" ){
@@ -68,7 +68,7 @@ void surfacemesh_filter_addnoise::applyFilter(RichParameterSet* pars){
     mesh()->updateBoundingBox();
     if(drawArea()) drawArea()->resetViewport();
     
-    qDebug() << "New bounding box: " << printBounding(mesh()->bbox());
+     qDebug() << "New bounding box: " << printBounding(mesh()->bbox());
 }
 
 Q_EXPORT_PLUGIN(surfacemesh_filter_addnoise)
