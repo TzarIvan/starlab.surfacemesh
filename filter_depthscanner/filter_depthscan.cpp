@@ -27,7 +27,9 @@ inline double randn( const double mean, const double stddev ){
    return mean + stddev * t1;
 }
 
+#ifdef WIN32
 inline bool isnan(double a){ return (a!=a); }
+#endif
 
 void filter_depthscan::initParameters(RichParameterSet* pars){
     double noisedefault = 0.0025;
